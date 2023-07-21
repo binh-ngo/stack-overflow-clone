@@ -79,7 +79,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
           USER_TABLE: usersTable.tableName,
         },
       });
-      postsTable.grantFullAccess(postLambda);
+      postsTable.grantFullAccess(usersLambda);
   
       const api = new GraphqlApi(this, "PostApi", {
         name: "post-appsync-api",
@@ -135,17 +135,18 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         resources: [postLambda.functionArn],
       });
       appSyncDataSourceRole.addToPolicy(policyStatement);
+      
       const postDataSource = api.addLambdaDataSource(
         "PostDataSource",
         postLambda
       );
       postDataSource.createResolver({
         typeName: "Query",
-        fieldName: "getQuestions",
+        fieldName: "getAllQuestions",
       });
       postDataSource.createResolver({
         typeName: "Query",
-        fieldName: "viewQuestion",
+        fieldName: "getQuestionById",
       });
       postDataSource.createResolver({
         typeName: "Query",
@@ -169,7 +170,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "postQuestion",
+        fieldName: "createQuestion",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -177,7 +178,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "editQuestion",
+        fieldName: "updateQuestion",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -185,7 +186,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "postAnswer",
+        fieldName: "createAnswer",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -193,7 +194,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "editAnswer",
+        fieldName: "updateAnswer",
       });
       postDataSource.createResolver({
         typeName: "Mutation",

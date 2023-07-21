@@ -4,51 +4,55 @@ schema {
 }
 
   type Query {
-    getQuestions(
-      sortBy: SortByType!
-      page: Int!
-      limit: Int!
-      filterByTag: String
-      filterBySearch: String
-    ): PaginatedQuesList!
-    viewQuestion(quesId: ID!): Question
+    getAllQuestions(author: String!): [Question] 
+    getQuestionById(author: String!, quesId: String!): Question
+
     getUser(username: String!): User!
     getAllUsers: [UserList]!
     getAllTags: [Tag]!
   }
 
+# @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
+
   type Mutation {
     register(username: String!, password: String!): LoggedUser!
     login(username: String!, password: String!): LoggedUser!
 
-    postQuestion(title: String!, body: String!, tags: [String!]!): Question!
-    deleteQuestion(quesId: ID!): ID!
-    editQuestion(
-      quesId: ID!
-      title: String!
-      body: String!
-      tags: [String!]!
-    ): Question!
-    voteQuestion(quesId: ID!, voteType: VoteType!): Question!
+    createQuestion(question: QuestionInput): Question @aws_cognito_user_pools
+    deleteQuestion(author: String!, quesId: ID!): String @aws_cognito_user_pools
+    updateQuestion(
+      author: String!
+      quesId: String!
+      question: QuestionInput!
+    ): Question @aws_cognito_user_pools
 
-    postAnswer(quesId: ID!, body: String!): [Answer!]!
-    deleteAnswer(quesId: ID!, ansId: ID!): ID!
-    editAnswer(quesId: ID!, ansId: ID!, body: String!): [Answer!]!
+    voteQuestion(quesId: ID!, voteType: VoteType!): Question! @aws_cognito_user_pools
+
+    # TODO: answer lambdas for crud functionality
+    createAnswer(answer: AnswerInput): Answer @aws_cognito_user_pools
+    deleteAnswer(author: String!, ansId: ID!): String @aws_cognito_user_pools
+    updateAnswer(
+      author: String!
+      ansId: String!
+      answer: AnswerInput!
+    ): Question @aws_cognito_user_pools
+    
     voteAnswer(quesId: ID!, ansId: ID!, voteType: VoteType!): Answer!
     acceptAnswer(quesId: ID!, ansId: ID!): Question!
+    
+    # TODO: comment lambdas for crud functionality
+    addQuesComment(quesId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
+    deleteQuesComment(quesId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
+    editQuesComment(quesId: ID!, commentId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
 
-    addQuesComment(quesId: ID!, body: String!): [Comment!]!
-    deleteQuesComment(quesId: ID!, commentId: ID!): ID!
-    editQuesComment(quesId: ID!, commentId: ID!, body: String!): [Comment!]!
-
-    addAnsComment(quesId: ID!, ansId: ID!, body: String!): [Comment!]!
-    deleteAnsComment(quesId: ID!, ansId: ID!, commentId: ID!): ID!
+    addAnsComment(quesId: ID!, ansId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
+    deleteAnsComment(quesId: ID!, ansId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
     editAnsComment(
       quesId: ID!
       ansId: ID!
       commentId: ID!
       body: String!
-    ): [Comment!]!
+    ): [Comment!]! @aws_cognito_user_pools
   }
 
   enum RoleType {
@@ -98,6 +102,7 @@ schema {
   type User {
     id: ID!
     username: String!
+    imageUrl: AWSURL
     role: RoleType!
     questions: [QuestionRep]!
     answers: [AnswerRep]!
@@ -186,3 +191,15 @@ schema {
     tagName: String!
     count: Int!
   }
+
+  input QuestionInput {
+    title: String!
+    body: String!
+    author: String!
+    tags: [String]!
+}
+
+input AnswerInput {
+  body: String!
+  author: String!
+}
