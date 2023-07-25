@@ -1,14 +1,13 @@
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 const docClient = new DynamoDB.DocumentClient();
 import { Answer, AnswerInput } from "../types";
-import { ulid } from 'ulid'
 
 const createAnswer = async (quesId: String, answerInput: AnswerInput) => {
     console.log(
         `createAnswer invocation event: ${JSON.stringify(answerInput, null, 2)}`
     );
 
-    const ansId = ulid();
+    const ansId = new Date().toISOString();
 
     const answer: Answer = {
         ansId,
@@ -22,36 +21,46 @@ const createAnswer = async (quesId: String, answerInput: AnswerInput) => {
         upvotedBy: null,
         downvotedBy: null
     };
+    const formattedAuthor = answerInput.author.trim().replace(/\s+/g, "");
 
-    try {
-        // allows you to make up to 100 action requests to multiple tables in 
-        // the same account and region 
-        await docClient.transactWrite({
-            TransactItems: [{
-                Put: {
-                    TableName: process.env.POSTS_TABLE,
-                    Item: {
-                        PK: `ANSWER#${answerInput.author}`,
-                        SK: ansId,
-                        ...answer,
-                    },
-                    ReturnConsumedCapacity: "TOTAL",
-                }
-            }, {
-                Update: {
-                    TableName: process.env.USERS_TABLE,
-                    Key: {
-                        author: answerInput.author
-                    },
-                    UpdateExpression: 'ADD totalAnswers :one',
-                    ExpressionAttributeValues: {
-                        ':one': 1
-                    },
-                    ConditionExpression: 'attribute_exists(author)'
-                }
-            }
-            ]
-        }).promise();
+    const params = {
+        TableName: process.env.POSTS_TABLE,
+        Item: {
+          PK: `ANSWER#${formattedAuthor}`,
+          SK: ansId,
+          type: "question",
+          ...answer,
+        },
+        ReturnConsumedCapacity: "TOTAL",
+      };
+        try {
+            // await docClient.transactWrite({
+            //     TransactItems: [{
+            //         Put: {
+            //             TableName: process.env.POSTS_TABLE,
+            //             Item: {
+            //                 PK: `QUESTION#${questionInput.author}`,
+            //                 SK: quesId,
+            //                 ...question,
+            //             },
+            //             ReturnConsumedCapacity: "TOTAL",
+            //         }
+            //     }, {
+            //         Update: {
+            //             TableName: process.env.USERS_TABLE,
+            //             Key: {
+            //                 author: questionInput.author
+            //             },
+            //             UpdateExpression: 'ADD totalQuestions :one',
+            //             ExpressionAttributeValues: {
+            //                 ':one': 1
+            //             },
+            //             ConditionExpression: 'attribute_exists(author)'
+            //         }
+            //     }
+            //     ]
+            // }).promise();     
+            await docClient.put(params).promise();
         return answer;
 
     } catch (err) {

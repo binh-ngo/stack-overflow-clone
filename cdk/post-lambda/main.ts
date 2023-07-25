@@ -18,38 +18,47 @@ import updateComment from "./comments/updateComment";
 
 import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent } from "./types";
 
-// Main handler function using function overloading
-// export async function handler(event: GetAllQuestionsAppSyncEvent): Promise<any>;
-export async function handler(event: QuestionAppSyncEvent): Promise<any>;
-export async function handler(event: AnswerAppSyncEvent): Promise<any>;
-export async function handler(event: CommentAppSyncEvent): Promise<any>;
-
 export async function handler(event: any): Promise<any> {
-  console.log(`EVENT --- ${JSON.stringify(event)}`)
-  if (isQuestionEvent(event)) {
+  console.log(`EVENT --- ${JSON.stringify(event)}`);
+  const eventType = getEventType(event);
+
+  if (eventType === "Question") {
+    // Handle QuestionAppSyncEvent
     return handleQuestionEvent(event);
-  } else if (isAnswerEvent(event)) {
-    console.log(`ANSWER ---${JSON.stringify(event)}`);
+  } else if (eventType === "Answer") {
+    // Handle AnswerAppSyncEvent
     return handleAnswerEvent(event);
-  } else if (isCommentEvent(event)) {
-    console.log(`COMMENT ---${JSON.stringify(event)}`);
+  } else if (eventType === "Comment") {
+    // Handle CommentAppSyncEvent
     return handleCommentEvent(event);
   } else {
     throw new Error(`Unknown event type.`);
   }
 }
-
-// Helper functions to determine the type of event
-function isQuestionEvent(event: any): event is QuestionAppSyncEvent {
-  return "arguments" in event && "quesId" in event.arguments || "author" in event.arguments || "question" in event.arguments;
-}
-
-function isAnswerEvent(event: any): event is AnswerAppSyncEvent {
-  return "arguments" in event && "ansId" in event.arguments;
-}
-
-function isCommentEvent(event: any): event is CommentAppSyncEvent {
-  return "arguments" in event && "parentId" in event.arguments;
+// Function to determine the event type based on the field name
+function getEventType(event: any): "Question" | "Answer" | "Comment" {
+  switch (event.info.fieldName) {
+    case "getQuestionById":
+    case "getAllQuestions":
+    case "createQuestion":
+    case "updateQuestion":
+    case "deleteQuestion":
+      return "Question";
+    case "getAnswerById":
+    case "getAllAnswers":
+    case "createAnswer":
+    case "updateAnswer":
+    case "deleteAnswer":
+      return "Answer";
+    case "getCommentById":
+    case "getAllComments":
+    case "createComment":
+    case "updateComment":
+    case "deleteComment":
+      return "Comment";
+    default:
+      throw new Error(`Unknown field name: ${event.info.fieldName}`);
+  }
 }
 
 // Handler function for question events
@@ -80,19 +89,19 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
 function handleAnswerEvent(event: AnswerAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getAnswerById":
-      return getAnswerById(event.arguments.author, event.arguments.ansId);
+      return getAnswerById(event.arguments.author!, event.arguments.ansId!);
     case "getAllAnswers":
-      return getAllAnswers(event.arguments.author);
+      return getAllAnswers(event.arguments.author!);
     case "createAnswer":
-      return createAnswer(event.arguments.quesId, event.arguments.answer);
+      return createAnswer(event.arguments.quesId!, event.arguments.answer!);
     case "updateAnswer":
       return updateAnswer(
-        event.arguments.author,
-        event.arguments.ansId,
-        event.arguments.answer
+        event.arguments.author!,
+        event.arguments.ansId!,
+        event.arguments.answer!
       );
     case "deleteAnswer":
-      return deleteAnswer(event.arguments.author, event.arguments.ansId);
+      return deleteAnswer(event.arguments.author!, event.arguments.ansId!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }
@@ -102,19 +111,19 @@ function handleAnswerEvent(event: AnswerAppSyncEvent) {
 function handleCommentEvent(event: CommentAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getCommentById":
-      return getCommentById(event.arguments.author, event.arguments.commId);
+      return getCommentById(event.arguments.author!, event.arguments.commId!);
     case "getAllComments":
-      return getAllComments(event.arguments.author);
+      return getAllComments(event.arguments.author!);
     case "createComment":
-      return createComment(event.arguments.parentId, event.arguments.comment);
+      return createComment(event.arguments.parentId!, event.arguments.comment!);
     case "updateComment":
       return updateComment(
-        event.arguments.author,
-        event.arguments.parentId,
-        event.arguments.comment
+        event.arguments.author!,
+        event.arguments.parentId!,
+        event.arguments.comment!
       );
     case "deleteComment":
-      return deleteComment(event.arguments.author, event.arguments.commId);    
+      return deleteComment(event.arguments.author!, event.arguments.commId!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }

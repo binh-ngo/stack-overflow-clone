@@ -17,7 +17,7 @@ const getAllAnswers = async (author: string) => {
       ":post_partition": `ANSWER#${author}`,
     },
     ReturnConsumedCapacity: "TOTAL",
-    ScanIndexForward: false,
+    ScanIndexForward: true,
   };
 
   try {

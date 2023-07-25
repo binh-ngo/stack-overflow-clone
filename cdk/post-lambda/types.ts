@@ -59,7 +59,7 @@ export type AnswerUpdateableFields = {
 };
 
 export type AnswerInput = {
-    quesId: String;
+    quesId?: String;
     body: String;
     author: String;
     updated?: String;
@@ -89,15 +89,6 @@ export type CommentInput = {
     author: String;
 }
 
-// export type GetAllQuestionsAppSyncEvent = {
-//     info: {
-//       fieldName: string;
-//     };
-//     arguments: {
-//       author: string;
-//     };
-//   };
-  
 export type QuestionAppSyncEvent = {
     info: {
       fieldName: string;
@@ -114,10 +105,10 @@ export type AnswerAppSyncEvent = {
       fieldName: string;
     };
     arguments: {
-      author: string;
-      ansId: string;
-      quesId: string;
-      answer: AnswerInput;
+      author?: string;
+      ansId?: string;
+      quesId?: string;
+      answer?: AnswerInput;
     };
 };
   
@@ -126,10 +117,10 @@ export type CommentAppSyncEvent = {
       fieldName: string;
     };
     arguments: {
-      commId: string;
-      parentId: string;
-      author: string;
-      comment: CommentInput;
+      commId?: string;
+      parentId?: string;
+      author?: string;
+      comment?: CommentInput;
     };
 };
   

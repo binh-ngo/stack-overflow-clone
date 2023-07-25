@@ -2,10 +2,16 @@ schema {
     query: Query
     mutation: Mutation
 }
-
+# TODO: create query for tags
   type Query {
     getAllQuestions(author: String!): [Question] 
     getQuestionById(author: String!, quesId: String!): Question
+
+    getAllAnswers(author: String!): [Answer] 
+    getAnswerById(author: String!, ansId: String!): Answer
+
+    getAllComments(author: String!): [Comment] 
+    getCommentById(author: String!, commId: String!): Comment
 
     getUser(username: String!): User!
     getAllUsers: [UserList]!
@@ -27,7 +33,7 @@ schema {
     voteQuestion(quesId: ID!, voteType: VoteType!): Question! @aws_cognito_user_pools
 
     # TODO: answer lambdas for crud functionality
-    createAnswer(answer: AnswerInput): Answer @aws_cognito_user_pools
+    createAnswer(quesId: ID!, answer: AnswerInput): Answer @aws_cognito_user_pools
     deleteAnswer(author: String!, ansId: ID!): String @aws_cognito_user_pools
     updateAnswer(
       author: String!
@@ -39,13 +45,13 @@ schema {
     acceptAnswer(quesId: ID!, ansId: ID!): Question!
     
     # TODO: comment lambdas for crud functionality
-    addQuesComment(quesId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
+    createQuesComment(quesId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
     deleteQuesComment(quesId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
-    editQuesComment(quesId: ID!, commentId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
+    updateQuesComment(quesId: ID!, commentId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
 
-    addAnsComment(quesId: ID!, ansId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
+    createAnsComment(quesId: ID!, ansId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
     deleteAnsComment(quesId: ID!, ansId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
-    editAnsComment(
+    updateAnsComment(
       quesId: ID!
       ansId: ID!
       commentId: ID!

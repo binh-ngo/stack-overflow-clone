@@ -146,6 +146,8 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         "PostDataSource",
         postLambda
       );
+
+      // Question Resolvers
       postDataSource.createResolver({
         typeName: "Query",
         fieldName: "getAllQuestions",
@@ -153,26 +155,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       postDataSource.createResolver({
         typeName: "Query",
         fieldName: "getQuestionById",
-      });
-      postDataSource.createResolver({
-        typeName: "Query",
-        fieldName: "getUser",
-      });
-      postDataSource.createResolver({
-        typeName: "Query",
-        fieldName: "getAllUsers",
-      });
-      postDataSource.createResolver({
-        typeName: "Query",
-        fieldName: "getAllTags",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "register",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "login",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -189,6 +171,16 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       postDataSource.createResolver({
         typeName: "Mutation",
         fieldName: "voteQuestion",
+      });
+
+      // Answer Resolvers
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getAllAnswers",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getAnswerById",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -210,9 +202,37 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         typeName: "Mutation",
         fieldName: "acceptAnswer",
       });
+
+      // User Resolvers
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getUser",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getAllUsers",
+      });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "addQuesComment",
+        fieldName: "register",
+      });
+      postDataSource.createResolver({
+        typeName: "Mutation",
+        fieldName: "login",
+      });
+
+      // Comment Resolvers
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getAllComments",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getCommentById",
+      });      
+      postDataSource.createResolver({
+        typeName: "Mutation",
+        fieldName: "createQuesComment",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -220,11 +240,11 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "editQuesComment",
+        fieldName: "updateQuesComment",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "addAnsComment",
+        fieldName: "createAnsComment",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
@@ -232,7 +252,13 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "editAnsComment",
+        fieldName: "updateAnsComment",
+      });
+
+      // Other 
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getAllTags",
       });
     }
   }
