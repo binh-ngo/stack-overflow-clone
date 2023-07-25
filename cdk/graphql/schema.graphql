@@ -45,19 +45,15 @@ schema {
     acceptAnswer(quesId: ID!, ansId: ID!): Question!
     
     # TODO: comment lambdas for crud functionality
-    createQuesComment(quesId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
-    deleteQuesComment(quesId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
-    updateQuesComment(quesId: ID!, commentId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
-
-    createAnsComment(quesId: ID!, ansId: ID!, body: String!): [Comment!]! @aws_cognito_user_pools
-    deleteAnsComment(quesId: ID!, ansId: ID!, commentId: ID!): ID! @aws_cognito_user_pools
-    updateAnsComment(
-      quesId: ID!
-      ansId: ID!
-      commentId: ID!
-      body: String!
-    ): [Comment!]! @aws_cognito_user_pools
+    createComment(parentId: ID!, comment: CommentInput): Comment @aws_cognito_user_pools
+    deleteComment(parentId: ID!, commId: ID!): ID! @aws_cognito_user_pools
+    updateComment(
+      author: String!,
+      commId: ID!, 
+      comment: CommentInput!
+    ): Comment @aws_cognito_user_pools
   }
+
 
   enum RoleType {
     USER
@@ -124,6 +120,24 @@ schema {
     createdAt: AWSDateTime!
   }
 
+# TODO: decide whether to keep this or not. as of right now, this author object 
+# shows this error whenever I try to include it in the query
+# {
+#   "data": {
+#     "getCommentById": null
+#   },
+#   "errors": [
+#     {
+#       "path": [
+#         "getCommentById",
+#         "author",
+#         "id"
+#       ],
+#       "locations": null,
+#       "message": "Cannot return null for non-nullable type: 'ID' within parent 'Author' (/getCommentById/author/id)"
+#     }
+#   ]
+# }
   type Author {
     id: ID!
     username: String!
@@ -208,4 +222,8 @@ schema {
 input AnswerInput {
   body: String!
   author: String!
+}
+input CommentInput  {
+    body: String!;
+    author: String!;
 }

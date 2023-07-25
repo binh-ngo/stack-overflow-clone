@@ -11,20 +11,20 @@ const updateAnswer = async (
     if (!answerInput) {
         return { statusCode: 400, body: 'invalid request, you are missing the parameter body' };
     };
-    
+
     if (!author || !ansId) {
         return { statusCode: 400, body: 'invalid request, you are missing the pk or sk.' };
     }
-    
-        const answer: QuestionUpdateableFields = {
-            body: answerInput.body,
-            updatedAt: new Date().toISOString(),
-        };
 
-        console.log(`UPDATE answer called with:` + JSON.stringify(` UserPK: ${author} and UserSk: ${ansId}`));
-        // const eventBody = JSON.parse(event.body);
-        // console.log(`EVENT BODY ${eventBody}`);
-        console.log(`TYPEOF ANSWER-INPUT --------- ${typeof (answerInput)}`);
+    const answer: QuestionUpdateableFields = {
+        body: answerInput.body,
+        updatedAt: new Date().toISOString(),
+    };
+
+    console.log(`UPDATE answer called with:` + JSON.stringify(` UserPK: ${author} and UserSk: ${ansId}`));
+    // const eventBody = JSON.parse(event.body);
+    // console.log(`EVENT BODY ${eventBody}`);
+    console.log(`TYPEOF ANSWER-INPUT --------- ${typeof (answerInput)}`);
     const params = {
         TableName: process.env.POSTS_TABLE,
         Key: {

@@ -1,18 +1,17 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { Comment, CommentInput } from "../types";
-const ulid = require('ulid')
 
 const createComment = async (parentId: String, commentInput: CommentInput) => {
     console.log(
         `createComment invocation event: ${JSON.stringify(commentInput, null, 2)}`
     );
 
-    const id = ulid.ulid();
+    const commId = new Date().toISOString();
 
     const comment: Comment = {
-        commId: id,
-        parentId: parentId,
+        commId,
+        parentId,
         author: commentInput.author,
         body: commentInput.body,
         points: 0,
@@ -26,7 +25,7 @@ const createComment = async (parentId: String, commentInput: CommentInput) => {
         TableName: process.env.POSTS_TABLE,
         Item: {
             PK: `COMMENT#${commentInput.author}`,
-            SK: id,
+            SK: commId,
             ...comment,
         },
         ReturnConsumedCapacity: "TOTAL",

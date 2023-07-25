@@ -119,7 +119,7 @@ function handleCommentEvent(event: CommentAppSyncEvent) {
     case "updateComment":
       return updateComment(
         event.arguments.author!,
-        event.arguments.parentId!,
+        event.arguments.commId!,
         event.arguments.comment!
       );
     case "deleteComment":

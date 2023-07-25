@@ -232,27 +232,15 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });      
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "createQuesComment",
+        fieldName: "createComment",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "deleteQuesComment",
+        fieldName: "deleteComment",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "updateQuesComment",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "createAnsComment",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "deleteAnsComment",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "updateAnsComment",
+        fieldName: "updateComment",
       });
 
       // Other 

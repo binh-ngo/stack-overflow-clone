@@ -40,6 +40,17 @@ export type QuestionUpdateableFields = {
         views?: Number;
 };
 
+export type QuestionAppSyncEvent = {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    author?: string;
+    quesId?: string;
+    question?: QuestionInput;
+  };
+};
+
 export type Answer = {
     ansId: String;
     quesId: String;
@@ -65,6 +76,18 @@ export type AnswerInput = {
     updated?: String;
 }
 
+export type AnswerAppSyncEvent = {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    author?: string;
+    ansId?: string;
+    quesId?: string;
+    answer?: AnswerInput;
+  };
+};
+
 export type Comment = {
     commId: String;
     parentId: String;
@@ -87,40 +110,18 @@ export type CommentInput = {
     parentId?: String;
     body: String;
     author: String;
+    updated?: String;
 }
-
-export type QuestionAppSyncEvent = {
-    info: {
-      fieldName: string;
-    };
-    arguments: {
-      author?: string;
-      quesId?: string;
-      question?: QuestionInput;
-    };
-};
-  
-export type AnswerAppSyncEvent = {
-    info: {
-      fieldName: string;
-    };
-    arguments: {
-      author?: string;
-      ansId?: string;
-      quesId?: string;
-      answer?: AnswerInput;
-    };
-};
   
 export type CommentAppSyncEvent = {
-    info: {
-      fieldName: string;
-    };
-    arguments: {
-      commId?: string;
-      parentId?: string;
-      author?: string;
-      comment?: CommentInput;
-    };
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    commId?: string;
+    parentId?: string;
+    author?: string;
+    comment?: CommentInput;
+  };
 };
-  
+
