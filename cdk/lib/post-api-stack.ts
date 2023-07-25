@@ -69,7 +69,8 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         },
       });
       postsTable.grantFullAccess(postLambda);
-
+      usersTable.grantFullAccess(postLambda);
+      
       const usersLambda = new LambdaFunction(this, "StackOverflowUserLambda", {
         runtime: Runtime.NODEJS_14_X,
         handler: "main.handler",
@@ -79,7 +80,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
           USER_TABLE: usersTable.tableName,
         },
       });
-      postsTable.grantFullAccess(usersLambda);
+      usersTable.grantFullAccess(usersLambda);
   
       const api = new GraphqlApi(this, "PostApi", {
         name: "post-appsync-api",
@@ -129,13 +130,18 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
   
       // Attach the necessary policy statement to the role
-      const policyStatement = new PolicyStatement({
+      appSyncDataSourceRole.addToPolicy(new PolicyStatement({
         effect: Effect.ALLOW,
         actions: ['lambda:InvokeFunction'], // Add other required actions as needed
         resources: [postLambda.functionArn],
-      });
-      appSyncDataSourceRole.addToPolicy(policyStatement);
+      }));
       
+      appSyncDataSourceRole.addToPolicy(new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ['dynamodb:UpdateItem'], // Add other required DynamoDB actions as needed
+        resources: [postsTable.tableArn],
+      }));
+
       const postDataSource = api.addLambdaDataSource(
         "PostDataSource",
         postLambda

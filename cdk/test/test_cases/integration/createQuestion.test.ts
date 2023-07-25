@@ -19,12 +19,12 @@ describe("When createQuestion is invoked", () => {
   });
 
   it("should create a question in DDB", async () => {
-    const questionInput: QuestionInput = given.a_random_post_input();
-    const question = await when.we_invoke_createPost(questionInput);
+    const questionInput: QuestionInput = given.a_random_question_input();
+    const question = await when.we_invoke_createQuestion(questionInput);
 
     console.log(`question: ${JSON.stringify(question, null, 2)}`);
 
-    const ddbPost = await then.post_exists_in_ddb(
+    const ddbPost = await then.question_exists_in_ddb(
       questionInput.author,
       question.questId
     );

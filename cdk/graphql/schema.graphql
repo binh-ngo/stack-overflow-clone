@@ -15,8 +15,6 @@ schema {
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
 
   type Mutation {
-    register(username: String!, password: String!): LoggedUser!
-    login(username: String!, password: String!): LoggedUser!
 
     createQuestion(question: QuestionInput): Question @aws_cognito_user_pools
     deleteQuestion(author: String!, quesId: ID!): String @aws_cognito_user_pools
@@ -126,7 +124,8 @@ schema {
   }
 
   type Comment {
-    id: ID!
+    commId: ID!
+    parentId: ID!
     author: Author!
     body: String!
     createdAt: AWSDateTime!
@@ -134,7 +133,8 @@ schema {
   }
 
   type Answer {
-    id: ID!
+    ansId: ID!
+    quesId: ID!
     author: Author!
     body: String!
     comments: [Comment]!
@@ -146,7 +146,7 @@ schema {
   }
 
   type QuestionList {
-    id: ID!
+    quesId: ID!
     author: Author!
     title: String!
     body: String!
@@ -160,7 +160,7 @@ schema {
   }
 
   type Question {
-    id: ID!
+    quesId: ID!
     author: Author!
     title: String!
     body: String!

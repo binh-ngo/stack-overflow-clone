@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { Question, QuestionInput } from "../types";
-const ulid = require('ulid')
 require("dotenv").config({ path: ".env" });
 
 const createQuestion = async (questionInput: QuestionInput) => {
@@ -9,7 +8,7 @@ const createQuestion = async (questionInput: QuestionInput) => {
         `createQuestion invocation event: ${JSON.stringify(questionInput, null, 2)}`
     );
 
-    const quesId = ulid.ulid();
+    const quesId = new Date().toISOString();
     // TODO: userAuth
     // const author = loggedinUser()
 

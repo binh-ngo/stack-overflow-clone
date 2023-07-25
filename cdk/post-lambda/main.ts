@@ -16,60 +16,61 @@ import getCommentById from "./comments/getCommentById";
 import getAllComments from "./comments/getAllComment";
 import updateComment from "./comments/updateComment";
 
-import { AnswerInput, CommentInput, QuestionInput } from "./types";
+import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent } from "./types";
 
-type QuestionAppSyncEvent = {
-  info: {
-    fieldName: string;
-  };
-  arguments: {
-    author: string;
-    quesId: string;
-    question: QuestionInput;
-  };
-};
+// Main handler function using function overloading
+// export async function handler(event: GetAllQuestionsAppSyncEvent): Promise<any>;
+export async function handler(event: QuestionAppSyncEvent): Promise<any>;
+export async function handler(event: AnswerAppSyncEvent): Promise<any>;
+export async function handler(event: CommentAppSyncEvent): Promise<any>;
 
-type AnswerAppSyncEvent = {
-  info: {
-    fieldName: string;
-  };
-  arguments: {
-    author: string;
-    ansId: string;
-    quesId: string;
-    answer: AnswerInput;
-  };
-};
+export async function handler(event: any): Promise<any> {
+  console.log(`EVENT --- ${JSON.stringify(event)}`)
+  if (isQuestionEvent(event)) {
+    return handleQuestionEvent(event);
+  } else if (isAnswerEvent(event)) {
+    console.log(`ANSWER ---${JSON.stringify(event)}`);
+    return handleAnswerEvent(event);
+  } else if (isCommentEvent(event)) {
+    console.log(`COMMENT ---${JSON.stringify(event)}`);
+    return handleCommentEvent(event);
+  } else {
+    throw new Error(`Unknown event type.`);
+  }
+}
 
-type CommentAppSyncEvent = {
-  info: {
-    fieldName: string;
-  };
-  arguments: {
-    commId: string;
-    parentId: string;
-    author: string;
-    comment: CommentInput;
-  };
-};
+// Helper functions to determine the type of event
+function isQuestionEvent(event: any): event is QuestionAppSyncEvent {
+  return "arguments" in event && "quesId" in event.arguments || "author" in event.arguments || "question" in event.arguments;
+}
+
+function isAnswerEvent(event: any): event is AnswerAppSyncEvent {
+  return "arguments" in event && "ansId" in event.arguments;
+}
+
+function isCommentEvent(event: any): event is CommentAppSyncEvent {
+  return "arguments" in event && "parentId" in event.arguments;
+}
 
 // Handler function for question events
 function handleQuestionEvent(event: QuestionAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getQuestionById":
-      return getQuestionById(event.arguments.author, event.arguments.quesId);
+      console.log(`QUESTION ---${JSON.stringify(event)}`);
+      return getQuestionById(event.arguments.author!, event.arguments.quesId!);
     case "getAllQuestions":
-      return getAllQuestions(event.arguments.author);
+      console.log(`QUESTION ---${JSON.stringify(event)}`);
+      return getAllQuestions(event.arguments.author!);
     case "createQuestion":
-      return createQuestion(event.arguments.question);
+      return createQuestion(event.arguments.question!);
     case "updateQuestion":
       return updateQuestion(
-        event.arguments.author,
-        event.arguments.quesId,
-        event.arguments.question
+        event.arguments.author!,
+        event.arguments.quesId!,
+        event.arguments.question!
       );
     case "deleteQuestion":
-      return deleteQuestion(event.arguments.author, event.arguments.quesId);
+      return deleteQuestion(event.arguments.author!, event.arguments.quesId!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }
@@ -113,36 +114,9 @@ function handleCommentEvent(event: CommentAppSyncEvent) {
         event.arguments.comment
       );
     case "deleteComment":
-      return deleteComment(event.arguments.author, event.arguments.commId);    default:
+      return deleteComment(event.arguments.author, event.arguments.commId);    
+    default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }
 }
 
-// Main handler function using function overloading
-export async function handler(event: QuestionAppSyncEvent): Promise<any>;
-export async function handler(event: AnswerAppSyncEvent): Promise<any>;
-export async function handler(event: CommentAppSyncEvent): Promise<any>;
-export async function handler(event: any): Promise<any> {
-  if (isQuestionEvent(event)) {
-    return handleQuestionEvent(event);
-  } else if (isAnswerEvent(event)) {
-    return handleAnswerEvent(event);
-  } else if (isCommentEvent(event)) {
-    return handleCommentEvent(event);
-  } else {
-    throw new Error(`Unknown event type.`);
-  }
-}
-
-// Helper functions to determine the type of event
-function isQuestionEvent(event: any): event is QuestionAppSyncEvent {
-  return "arguments" in event && "quesId" in event.arguments;
-}
-
-function isAnswerEvent(event: any): event is AnswerAppSyncEvent {
-  return "arguments" in event && "ansId" in event.arguments;
-}
-
-function isCommentEvent(event: any): event is CommentAppSyncEvent {
-  return "arguments" in event && ("quesId" in event.arguments || "ansId" in event.arguments);
-}

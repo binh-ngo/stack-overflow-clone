@@ -7,7 +7,10 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest",
+    "test": "jest --verbose --runInBand",
+    "unit-test": "jest --verbose ./test/test_cases/unit",
+    "integration-test": "jest --verbose --runInBand ./test/test_cases/integration",
+    "e2e-test": "jest --verbose ./test/test_cases/e2e",
     "cdk": "cdk"
   },
   "devDependencies": {
@@ -22,7 +25,9 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.72.0",
+    "aws-sdk": "^2.1420.0",
     "cdk-spa-deploy": "^2.0.0-alpha.1",
+    "chance": "^1.1.11",
     "constructs": "^10.0.0",
     "dotenv": "^16.3.1",
     "source-map-support": "^0.5.21",

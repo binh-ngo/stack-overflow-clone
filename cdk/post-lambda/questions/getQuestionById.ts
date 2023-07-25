@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+require('dotenv').config()
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 const getQuestionsById = async (author: string, quesId: string) => {

@@ -4,6 +4,7 @@ require('dotenv').config()
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 
+
 const getAllQuestions = async (author: string) => {
   console.log(`getAllQuestions called with: ${author}`);
 
@@ -17,7 +18,7 @@ const getAllQuestions = async (author: string) => {
       ":post_partition": `QUESTION#${author}`,
     },
     ReturnConsumedCapacity: "TOTAL",
-    ScanIndexForward: false,
+    ScanIndexForward: true,
   };
 
   try {

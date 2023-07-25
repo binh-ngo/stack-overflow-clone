@@ -88,3 +88,48 @@ export type CommentInput = {
     body: String;
     author: String;
 }
+
+// export type GetAllQuestionsAppSyncEvent = {
+//     info: {
+//       fieldName: string;
+//     };
+//     arguments: {
+//       author: string;
+//     };
+//   };
+  
+export type QuestionAppSyncEvent = {
+    info: {
+      fieldName: string;
+    };
+    arguments: {
+      author?: string;
+      quesId?: string;
+      question?: QuestionInput;
+    };
+};
+  
+export type AnswerAppSyncEvent = {
+    info: {
+      fieldName: string;
+    };
+    arguments: {
+      author: string;
+      ansId: string;
+      quesId: string;
+      answer: AnswerInput;
+    };
+};
+  
+export type CommentAppSyncEvent = {
+    info: {
+      fieldName: string;
+    };
+    arguments: {
+      commId: string;
+      parentId: string;
+      author: string;
+      comment: CommentInput;
+    };
+};
+  
