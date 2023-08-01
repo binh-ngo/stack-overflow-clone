@@ -4,9 +4,9 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx,html}",
 ],
   theme: {
-    // fontFamily: {
-    //   'futura':['Futura']
-    // },
+    fontFamily: {
+      'futura':['Futura']
+    },
     screens: {
       'xs': '500px',
       'sm': '640px',

@@ -1,32 +1,31 @@
-import React, { useRef } from 'react';
+import { useState } from 'react';
 
-export const Sidenav: React.FC = () => {
-  const sidenavMenuRef = useRef<HTMLUListElement>(null);
-  const sidenavLinkRef = useRef<HTMLAnchorElement>(null);
+export const Sidenav = () => {
+  const [activeLink, setActiveLink] = useState('Home');
+
+  const handleLinkClick = (link:any) => {
+    setActiveLink(link);
+  };
 
   return (
     <nav
-      id="sidenav-1"
-      className="relative left-0 top-0 h-full w-48 -translate-x-full bg-white border-r-2 data-[te-sidenav-hidden='false']:translate-x-0"
-      data-te-sidenav-hidden="false"
+      className="relative left-0 top-0 h-full w-4/12 sm:w-3/12 md:w-2/12 xl:w-1/12 bg-white border-r-2"
     >
-      <ul className="relative m-0 list-none px-[0.2rem]" ref={sidenavMenuRef} data-te-sidenav-menu-ref>
+      <ul className="relative m-0 list-none px-[0.2rem]">
         <li className="relative">
           <a
             href="/"
-            className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-500 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
-            ref={sidenavLinkRef}
-            data-te-sidenav-link-ref
+            className={`font-bold ${activeLink === 'Home' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
+            onClick={() => handleLinkClick("Home")}
           >
-            <span className='text-orange-600'>Home</span>
+            <span>Home</span>
           </a>
         </li>
         <li className="relative">
           <a
             href="/questions"
-            className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-500 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
-            ref={sidenavLinkRef}
-            data-te-sidenav-link-ref
+            className={`font-bold ${activeLink === 'Questions' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
+            onClick={() => handleLinkClick("Questions")}
           >
             <span>Questions</span>
           </a>
@@ -34,8 +33,8 @@ export const Sidenav: React.FC = () => {
         <li className="relative">
           <a
             href="/users"
-            className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-500 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
-            ref={sidenavLinkRef}
+            className={`font-bold ${activeLink === 'Users' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
+            onClick={() => handleLinkClick("Users")}
           >
             <span>Users</span>
           </a>
@@ -43,8 +42,8 @@ export const Sidenav: React.FC = () => {
         <li className="relative">
           <a
             href="/tags"
-            className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-500 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
-            ref={sidenavLinkRef}
+            className={`font-bold ${activeLink === 'Tags' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
+            onClick={() => handleLinkClick("Tags")}
           >
             <span>Tags</span>
           </a>
@@ -52,14 +51,14 @@ export const Sidenav: React.FC = () => {
         <li className="relative">
           <a
             href="/companies"
-            className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none dark:text-gray-500 dark:hover:bg-white/10 dark:focus:bg-white/10 dark:active:bg-white/10"
-            ref={sidenavLinkRef}
+            className={`font-bold ${activeLink === 'Companies' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
+            onClick={() => handleLinkClick("Companies")}
           >
             <span>Companies</span>
           </a>
         </li>
-        
       </ul>
     </nav>
   );
 };
+

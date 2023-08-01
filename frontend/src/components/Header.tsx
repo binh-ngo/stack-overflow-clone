@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import stackOverflowLogo from "../assets/stackoverflow_logo.png"
 import smallLogo from "../assets/smallLogo.png"
-import { LoginSignupButtons } from "./LoginSignupButtons"
 import SearchButton from "./SearchButton"
 import SearchComponent from "./SearchComponent"
-export {}
+import { Login } from './Login';
 
 export const Header = () => {
     const [isScreenLarge, setIsScreenLarge] = useState(false);
 
     useEffect(() => {
       const handleResize = () => {
-        setIsScreenLarge(window.innerWidth >= 376); // Adjust the breakpoint to your desired screen size.
+        setIsScreenLarge(window.innerWidth >= 501); // Adjust the breakpoint to your desired screen size.
       };
   
       // Add event listener to update isScreenLarge state on window resize.
@@ -25,10 +24,10 @@ export const Header = () => {
     }, []);
   
   return (
-    <div className="z-50 flex items-center justify-between py-4 border-b-2 border-black-200">
-        {isScreenLarge ? <img className="w-2/12 ml-2" src={stackOverflowLogo} alt="stackoverflow logo"/> : <img className="w-1/12" src={smallLogo} alt="stackoverflow logo"/> }
+    <div className="flex items-center justify-between py-4 border-b-2 border-black-200">
+        {isScreenLarge ? <img className="w-2/12 ml-2" src={stackOverflowLogo} alt="stackoverflow logo"/> : <img className="w-1/12 ml-4" src={smallLogo} alt="stackoverflow logo"/> }
         {isScreenLarge ? <SearchComponent /> : <SearchButton />}
-        <LoginSignupButtons />
+        <Login />
     </div>
   )
 }

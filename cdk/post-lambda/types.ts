@@ -25,6 +25,15 @@ export type Question = {
     updatedAt: String;
 }
 
+export type QuestionResponse = {
+  body: String;
+  createdAt: String;
+  points: String;
+  quesId: String;
+  title: String;
+  views: Number;
+}
+
 export type QuestionInput = {
     title: String;
     body: String;

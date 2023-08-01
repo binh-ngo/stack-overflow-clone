@@ -1,7 +1,7 @@
 import { useContext, ReactNode, useEffect, useState } from "react";
 import { AccountContext } from "./Accounts";
 import { useLocation, Navigate } from "react-router-dom";
-import { LoginPage } from "./pages/LoginPage";
+import { Login } from "./components/Login";
 import { Auth } from "aws-amplify";
 
 interface RequireAuthProps {
@@ -45,7 +45,7 @@ const RequireAuth: React.FC<RequireAuthProps> = ({
 
   if (!loggedInUser) {
     console.log(`status: not authed, redirecting to login...`);
-    return <LoginPage from={location.pathname} />;
+    return <Login from={location.pathname} />;
   }
 
   // if (!isAuthorized) {

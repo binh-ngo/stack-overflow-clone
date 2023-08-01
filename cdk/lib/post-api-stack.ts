@@ -69,7 +69,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         },
       });
       postsTable.grantFullAccess(postLambda);
-      usersTable.grantFullAccess(postLambda);
+      // usersTable.grantFullAccess(postLambda);
       
       const usersLambda = new LambdaFunction(this, "StackOverflowUserLambda", {
         runtime: Runtime.NODEJS_14_X,
