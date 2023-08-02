@@ -30,8 +30,8 @@ const updateQuestion = async (
     const params = {
         TableName: process.env.POSTS_TABLE,
         Key: {
-            PK: `QUESTION#${author}`,
-            SK: quesId,
+            PK: `AUTHOR#${author}`,
+            SK: `QUESTION#${quesId}`,
         },
         UpdateExpression:
             "set #title = :title, #body = :body, #updatedAt = :updatedAt, #tags = :tags",

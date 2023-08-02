@@ -1,12 +1,15 @@
 type ddbGetAllQueryResponse = {
-      author: string;
-      title: string;
-      body: string;
-      points: number;
-      quesId: string;
-      views: number;
-      createdAt: string;
-      updatedAt: string;
+  author: string;
+  title: string;
+  body: string;
+  points: number;
+  quesId: string;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
+  answers: [Answer];
+  comments: [Comment];
+  tags: [string];
 }
 
 type Answer = {

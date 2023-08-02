@@ -16,7 +16,10 @@ import { LandingPage } from "./pages/LandingPage";
 
 import { awsconfig } from "./aws-exports";
 import { Amplify } from "aws-amplify"
-// import { SingleQuestion } from "./pages/SingleQuestion";
+import { SingleQuestion } from "./pages/SingleQuestion";
+import { CreateQuestion } from "./pages/CreateQuestion";
+import { ddbCreateQuestion } from "./graphql";
+// import RequireAuth from "./RequireAuth";
 Amplify.configure(awsconfig);
 
 
@@ -24,23 +27,27 @@ function App() {
 
   return (
     <Router>
-    <div>
-      <Account>
-      <Header/>
-      <div className="flex flex-row h-screen">
-      <Sidenav/>
-        <Routes>
-          <Route path="/questions" element = {<AllQuestions />} />
-          {/* <Route path="/questions/:author/:quesId" element={<SingleQuestion />} /> */}
-          <Route path="/tags" element = {<AllTags />} />
-          <Route path="/users" element = {<AllUsers />} />
-          <Route path="/companies" element = {<AllCompanies />} />
-          <Route path="/" element={<LandingPage />} />
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
-        </Routes>
+      <div>
+        <Account>
+          <Header />
+          <div className="flex flex-row h-screen">
+            <Sidenav />
+            <Routes>
+              <Route path="/questions/:quesId/:author" element={<SingleQuestion />} />
+              <Route path="/questions" element={<AllQuestions />} />
+              {/* <RequireAuth> */}
+                <Route path="/questions/create" element={<CreateQuestion onSave={ddbCreateQuestion}/>} />
+              {/* </RequireAuth> */}
+              {/* <Route path="/questions/:author/:quesId" element={<SingleQuestion />} /> */}
+              <Route path="/tags" element={<AllTags />} />
+              <Route path="/users" element={<AllUsers />} />
+              <Route path="/companies" element={<AllCompanies />} />
+              <Route path="/" element={<LandingPage />} />
+              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            </Routes>
+          </div>
+        </Account>
       </div>
-      </Account>
-    </div>
     </Router>
   );
 }

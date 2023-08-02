@@ -14,7 +14,6 @@ export const AllQuestions = () => {
           // error happens here vvv
           const response = await ddbGetAllQuestions();
           setQuestions(response);
-          console.log(response)
       } catch (error) {
         console.error('Error fetching questions:', error);
       }
@@ -23,7 +22,7 @@ export const AllQuestions = () => {
     fetchQuestions();
   }, []);
 
-  
+
   return (
     <div className='flex flex-col items-center w-full'>
       <AskQuestionButton />
@@ -35,10 +34,9 @@ export const AllQuestions = () => {
           author={question.author}
           createdAt={question.createdAt}
           quesId={question.quesId}
-          // answers={question.answers}
-          // comments={question.comments}
+          answers={question.answers}
+          comments={question.comments}
           updatedAt={question.updatedAt}
-
           />
       ))}
     </div>

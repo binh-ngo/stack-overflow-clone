@@ -33,8 +33,8 @@ const formattedAuthor = questionInput.author.trim().replace(/\s+/g, "");
 const params = {
     TableName: process.env.POSTS_TABLE,
     Item: {
-      PK: `QUESTION#${formattedAuthor}`,
-      SK: quesId,
+      PK: `AUTHOR#${formattedAuthor}`,
+      SK: `QUESTION#${quesId}`,
       type: "question",
       ...question,
     },

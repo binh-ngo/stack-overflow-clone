@@ -6,11 +6,11 @@ schema {
     getAllQuestions(author: String!): [Question] 
     getQuestionById(author: String!, quesId: String!): Question
 
-    getAllAnswers(author: String!): [Answer] 
-    getAnswerById(author: String!, ansId: String!): Answer
+    # getAllAnswers(author: String!): [Answer] 
+    # getAnswerById(author: String!, ansId: String!): Answer
 
-    getAllComments(author: String!): [Comment] 
-    getCommentById(author: String!, commId: String!): Comment
+    # getAllComments(author: String!): [Comment] 
+    # getCommentById(author: String!, commId: String!): Comment
 
     # getUser(username: String!): User!
     # getAllUsers: [UserList]!
@@ -72,6 +72,11 @@ schema {
     OLDEST
   }
 
+  enum OrderDirection {
+  ASC
+  DESC
+}
+
   scalar AWSDateTime
 
   type QuestionRep {
@@ -111,29 +116,6 @@ schema {
     username: String!
     createdAt: AWSDateTime!
   }
-
-# TODO: decide whether to keep this or not. as of right now, this author object 
-# shows this error whenever I try to include it in the query
-# {
-#   "data": {
-#     "getCommentById": null
-#   },
-#   "errors": [
-#     {
-#       "path": [
-#         "getCommentById",
-#         "author",
-#         "id"
-#       ],
-#       "locations": null,
-#       "message": "Cannot return null for non-nullable type: 'ID' within parent 'Author' (/getCommentById/author/id)"
-#     }
-#   ]
-# }
-  # type Author {
-  #   id: ID!
-  #   username: String!
-  # }
 
   type Comment @aws_api_key @aws_cognito_user_pools {
     commId: ID!
@@ -218,4 +200,9 @@ input AnswerInput {
 input CommentInput  {
     body: String!;
     author: String!;
+}
+
+input OrderByInput {
+  field: String!
+  order: OrderDirection!
 }

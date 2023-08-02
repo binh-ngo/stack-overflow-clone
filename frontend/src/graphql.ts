@@ -5,29 +5,31 @@ import { API } from "aws-amplify";
 // ===========
 
 export type SaveQuestionProps = {
-    author:string;
+    author?:string;
     title: string;
     body: string;
     quesId?: string;
+    tags?: string[];
   };
 
 const createQuestionQuery = `
   mutation createQuestion($question: QuestionInput!) {
-    createPost(post: $post) {
+    createQuestion(question: $question) {
       author
-      quesId
       title
       body
-      tags
+      quesId
       createdAt
       updatedAt
+      tags
+      views
     }
   }
 `;
 
 const ddbCreateQuestion = async (question: SaveQuestionProps) => {
     // const contentString = JSON.stringify(value).replace(/"/g, '\\"');
-    const contentString = JSON.stringify(question.body);
+    const bodyString = JSON.stringify(question.body);
     // console.log(`contentString: ${contentString}`);
     const resp = await API.graphql({
       query: createQuestionQuery,
@@ -35,7 +37,8 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
         question: {
           author: question.author,
           title: question.title,
-          content: contentString,
+          body: bodyString,
+          tags: question.tags
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -86,7 +89,7 @@ const ddbGetQuestionById = async (author: string, quesId: string) => {
 
 const getAllQuestionsQuery = `
 query getAllQuestions {
-  getAllQuestions(author: "Binh") {
+  getAllQuestions(author: "stackOverflow-admin") {
     author
     title
     body
