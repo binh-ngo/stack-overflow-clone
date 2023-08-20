@@ -10,6 +10,7 @@ type ddbGetAllQueryResponse = {
   answers: [Answer];
   comments: [Comment];
   tags: [string];
+  value: string | null;
 }
 
 type Answer = {

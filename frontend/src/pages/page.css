@@ -1,0 +1,54 @@
+.page-content {
+    padding: 1rem 2rem;
+    font-size: medium;
+  }
+  
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .post-title {
+    font-size: large;
+    margin: 0 0 1rem;
+  }
+  
+  .post-link {
+    margin: 0 0.25rem;
+  }
+  
+  .admin-content {
+    margin: 0 0;
+  }
+  
+  .edit-page-link {
+    float: right;
+    margin: 1rem;
+  }
+  
+  .view-page-link {
+    float: right;
+    margin: 1rem;
+  }
+  
+  .title-input {
+    margin: 2rem 4rem 0;
+  }
+  
+  .title-input label {
+    margin: 0 0.5rem 0 0;
+  }
+  
+  .title-input input {
+    width: 100%;
+    font-size: x-large;
+    /* keep input within parent div */
+    box-sizing: border-box;
+  }
+  
+  .show-json {
+    margin: 6rem;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+    font-size: 0.8rem;
+  }

@@ -1,11 +1,4 @@
-import { useState } from 'react';
-
 export const Sidenav = () => {
-  const [activeLink, setActiveLink] = useState('Home');
-
-  const handleLinkClick = (link:any) => {
-    setActiveLink(link);
-  };
 
   return (
     <nav
@@ -15,8 +8,7 @@ export const Sidenav = () => {
         <li className="relative">
           <a
             href="/"
-            className={`font-bold ${activeLink === 'Home' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-            onClick={() => handleLinkClick("Home")}
+            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
           >
             <span>Home</span>
           </a>
@@ -24,8 +16,7 @@ export const Sidenav = () => {
         <li className="relative">
           <a
             href="/questions"
-            className={`font-bold ${activeLink === 'Questions' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-            onClick={() => handleLinkClick("Questions")}
+            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
           >
             <span>Questions</span>
           </a>
@@ -33,8 +24,7 @@ export const Sidenav = () => {
         <li className="relative">
           <a
             href="/users"
-            className={`font-bold ${activeLink === 'Users' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-            onClick={() => handleLinkClick("Users")}
+            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
           >
             <span>Users</span>
           </a>
@@ -42,8 +32,7 @@ export const Sidenav = () => {
         <li className="relative">
           <a
             href="/tags"
-            className={`font-bold ${activeLink === 'Tags' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-            onClick={() => handleLinkClick("Tags")}
+            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
           >
             <span>Tags</span>
           </a>
@@ -51,8 +40,7 @@ export const Sidenav = () => {
         <li className="relative">
           <a
             href="/companies"
-            className={`font-bold ${activeLink === 'Companies' ? 'text-orange-500' : 'text-gray-600 hover:text-orange-500'} flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-            onClick={() => handleLinkClick("Companies")}
+            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
           >
             <span>Companies</span>
           </a>

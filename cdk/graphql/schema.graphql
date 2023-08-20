@@ -22,33 +22,33 @@ schema {
   type Mutation {
 
     createQuestion(question: QuestionInput): Question @aws_cognito_user_pools
-    deleteQuestion(author: String!, quesId: ID!): String @aws_cognito_user_pools
+    deleteQuestion(author: String!, quesId: String!): String @aws_cognito_user_pools
     updateQuestion(
       author: String!
       quesId: String!
       question: QuestionInput!
     ): Question @aws_cognito_user_pools
 
-    voteQuestion(quesId: ID!, voteType: VoteType!): Question! @aws_cognito_user_pools
+    voteQuestion(quesId: String!, voteType: VoteType!): Question! @aws_cognito_user_pools
 
     # TODO: answer lambdas for crud functionality
-    createAnswer(quesId: ID!, answer: AnswerInput): Answer @aws_cognito_user_pools
-    deleteAnswer(author: String!, ansId: ID!): String @aws_cognito_user_pools
+    createAnswer(quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
+    deleteAnswer(author: String!, ansId: String!): String @aws_cognito_user_pools
     updateAnswer(
       author: String!
       ansId: String!
       answer: AnswerInput!
     ): Question @aws_cognito_user_pools
     
-    voteAnswer(quesId: ID!, ansId: ID!, voteType: VoteType!): Answer!
-    acceptAnswer(quesId: ID!, ansId: ID!): Question!
+    voteAnswer(quesId: String!, ansId: String!, voteType: VoteType!): Answer!
+    acceptAnswer(quesId: String!, ansId: String!): Question!
     
     # TODO: comment lambdas for crud functionality
-    createComment(parentId: ID!, comment: CommentInput): Comment @aws_cognito_user_pools
-    deleteComment(parentId: ID!, commId: ID!): ID! @aws_cognito_user_pools
+    createComment(parentId: String!, comment: CommentInput): Comment @aws_cognito_user_pools
+    deleteComment(parentId: String!, commId: String!): String! @aws_cognito_user_pools
     updateComment(
       author: String!,
-      commId: ID!, 
+      commId: String!, 
       comment: CommentInput!
     ): Comment @aws_cognito_user_pools
   }

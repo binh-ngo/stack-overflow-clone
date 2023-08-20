@@ -7,20 +7,18 @@ import { AskQuestionButton } from '../components/AskQuestionButton';
 
 export const AllQuestions = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
+  const [value, setValue] = useState({});
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      try {
-          // error happens here vvv
-          const response = await ddbGetAllQuestions();
-          setQuestions(response);
-      } catch (error) {
-        console.error('Error fetching questions:', error);
-      }
+        const response = await ddbGetAllQuestions();
+        setQuestions(response); // Set questions directly to the API response
+        setValue(response.body); // Assuming you want to set the entire response here
+        console.log(response);
     };
-
     fetchQuestions();
-  }, []);
+}, []);
+
 
 
   return (
@@ -37,7 +35,9 @@ export const AllQuestions = () => {
           answers={question.answers}
           comments={question.comments}
           updatedAt={question.updatedAt}
-          />
+          tags={question.tags}
+          value={value}
+        />
       ))}
     </div>
   );

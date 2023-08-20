@@ -98,6 +98,7 @@ query getAllQuestions {
     views
     createdAt
     updatedAt
+    tags
   }
 }
 `;

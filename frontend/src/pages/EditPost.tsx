@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ddbCreateQuestion, SaveQuestionProps } from "../graphql";
+import { ddbCreateQuestion, ddbGetQuestionById, SaveQuestionProps } from "../graphql";
 import Editor from "../components/Lexical/Editor.js";
-import { Auth } from "aws-amplify";
 import "../components/Lexical/styles.css"
+import { useParams } from "react-router-dom";
+import { ddbGetAllQueryResponse } from "../types";
 
 type CreateQuestionProps = {
   // onSave: (title: string, content: string) => void;
@@ -13,26 +14,30 @@ type CreateQuestionProps = {
   quesId?: string;
 };
 
-export const CreateQuestion = (props: CreateQuestionProps) => {
-  const [quesId, setQuesId] = useState("");
-  const [title, setTitle] = useState("");
-  const [tags, setTags] = useState("");
-  const [children, setChildren]: any = useState(props.children);
-  const [successfulSave, setSuccessfulSave] = useState(false);
-  const [author, setAuthor] = useState(null);
+export const EditQuestion = (props: CreateQuestionProps) => {
+    const { quesId, author } = useParams();
+    const [title, setTitle] = useState("");
+    const [tags, setTags] = useState("");
+    const [children, setChildren]: any = useState(props.children);
+    const [successfulSave, setSuccessfulSave] = useState(false);
+
+  const [question, setQuestion] = useState<ddbGetAllQueryResponse | null>(null);
+  const [value, setValue] = useState(null);
 
   useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const currentUser = await Auth.currentAuthenticatedUser();
-        setAuthor(currentUser.username);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+      const fetchQuestion = async () => {
+          const response = await ddbGetQuestionById(author ?? '', quesId ?? '');
+          const body = JSON.parse(response.body);
+          setQuestion(response);
+          setValue(body);
+          setTitle(body.title);
+          console.log(response);
       }
-    }
-
-    fetchUserData();
-  }, []);
+      if (quesId && author && !title && !value) {
+          console.log(`fetching data for author:${author} and quesId ${quesId}`);
+          fetchQuestion();
+      };
+  }, [quesId, title, author, value]);
 
   useEffect(() => {
     if (props.title) {
@@ -40,9 +45,6 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
     }
     if (props.children) {
       setChildren(props.children);
-    }
-    if (props.quesId) {
-      setQuesId(props.quesId);
     }
   }, [props.title, props.children, props.quesId]);
 
@@ -96,7 +98,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             className="border-b-2 border-orange-500 py-1"
             type="text"
             id="title"
-            value={title}
+            value={question ? question.title : ''}
             onChange={(event) => {
               setTitle(event.target.value);
             }}
@@ -109,7 +111,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             className="border-b-2 border-orange-500 py-1"
             type="text"
             id="tags"
-            value={tags}
+            value={question ? question.tags : ''}
             onChange={(event) => {
               setTags(event.target.value);
             }}
@@ -123,7 +125,6 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
       />
       {successfulSave && <span>Successfully saved</span>}
       <button className="text-white bg-orange-500 h-20 p-2 text-lg rounded-md" onClick={handleSave}>Save</button>
-
     </div>
   );
 };
