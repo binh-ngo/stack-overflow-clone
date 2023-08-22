@@ -2,7 +2,7 @@ const DynamoDB = require("aws-sdk/clients/dynamodb");
 const docClient = new DynamoDB.DocumentClient();
 import { Answer, AnswerInput } from "../types";
 
-const createAnswer = async (quesId: String, answerInput: AnswerInput) => {
+const createAnswer = async (quesId: string, answerInput: AnswerInput) => {
     console.log(
         `createAnswer invocation event: ${JSON.stringify(answerInput, null, 2)}`
     );

@@ -61,7 +61,8 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
       console.log(`onSave called with quesId: ${quesId}`);
       props.onSave({ title, body: children, quesId });
       setSuccessfulSave(true);
-
+      
+      // console.log(`This is the question: ${JSON.stringify(question)}`);
       const question = {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,

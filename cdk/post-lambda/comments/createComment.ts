@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { Comment, CommentInput } from "../types";
 
-const createComment = async (parentId: String, commentInput: CommentInput) => {
+const createComment = async (parentId: string, commentInput: CommentInput) => {
     console.log(
         `createComment invocation event: ${JSON.stringify(commentInput, null, 2)}`
     );

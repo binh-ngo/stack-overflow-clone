@@ -1,6 +1,6 @@
 export type ddbQueryPostsParams = {
     TableName: string;
-    KeyConditionExpression: string;
+    KeyConditionExpression?: string;
     ExpressionAttributeNames: { [key: string]: string };
     ExpressionAttributeValues: { [key: string]: any };
     FilterExpression?: string;
@@ -9,44 +9,44 @@ export type ddbQueryPostsParams = {
   };
 
 export type Question = {
-    quesId: String;
-    author: String;
-    title: String;
-    body: String;
-    tags: [String];
-    points: Number;
-    views: Number;
-    acceptedAnswer: String | null;
-    comments: [String] | null;
-    answers: [String] | null;
-    upvotedBy: [String] | null;
-    downvotedBy: [String] | null;
-    createdAt: String;
-    updatedAt: String;
+    quesId: string;
+    author: string;
+    title: string;
+    body: string;
+    tags: [string];
+    points: number;
+    views: number;
+    acceptedAnswer: string | null;
+    comments: [string] | null;
+    answers: [string] | null;
+    upvotedBy: [string] | null;
+    downvotedBy: [string] | null;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type QuestionResponse = {
-  body: String;
-  createdAt: String;
-  points: String;
-  quesId: String;
-  title: String;
-  views: Number;
+  body: string;
+  createdAt: string;
+  points: string;
+  quesId: string;
+  title: string;
+  views: number;
 }
 
 export type QuestionInput = {
-    title: String;
-    body: String;
-    author: String;
-    tags: [String];
+    title: string;
+    body: string;
+    author: string;
+    tags: [string];
 }
 
 export type QuestionUpdateableFields = {
-        title?: String;
-        body?: String;
-        tags?: [String];
-        updatedAt?: String;
-        views?: Number;
+        title?: string;
+        body?: string;
+        tags?: [string];
+        updatedAt?: string;
+        views?: number;
 };
 
 export type QuestionAppSyncEvent = {
@@ -61,28 +61,28 @@ export type QuestionAppSyncEvent = {
 };
 
 export type Answer = {
-    ansId: String;
-    quesId: String;
-    author: String;
-    body: String;
-    comments: [String] | null;
-    points: Number;
-    upvotedBy: [String] | null;
-    downvotedBy: [String] | null;
-    createdAt: String;
-    updatedAt: String;
+    ansId: string;
+    quesId: string;
+    author: string;
+    body: string;
+    comments: [string] | null;
+    points: number;
+    upvotedBy: [string] | null;
+    downvotedBy: [string] | null;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type AnswerUpdateableFields = {
-    body?: String;
-    updatedAt?: String;
+    body?: string;
+    updatedAt?: string;
 };
 
 export type AnswerInput = {
-    quesId?: String;
-    body: String;
-    author: String;
-    updated?: String;
+    quesId?: string;
+    body: string;
+    author: string;
+    updated?: string;
 }
 
 export type AnswerAppSyncEvent = {
@@ -98,28 +98,28 @@ export type AnswerAppSyncEvent = {
 };
 
 export type Comment = {
-    commId: String;
-    parentId: String;
-    author: String;
-    body: String;
-    points: Number;
-    upvotedBy: [String] | null;
-    downvotedBy: [String] | null;
-    createdAt: String;
-    updatedAt: String;
+    commId: string;
+    parentId: string;
+    author: string;
+    body: string;
+    points: number;
+    upvotedBy: [string] | null;
+    downvotedBy: [string] | null;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type CommentUpdateableFields = {
-    body?: String;
-    updatedAt?: String;
-    author?: String;
+    body?: string;
+    updatedAt?: string;
+    author?: string;
 };
 
 export type CommentInput = {
-    parentId?: String;
-    body: String;
-    author: String;
-    updated?: String;
+    parentId?: string;
+    body: string;
+    author: string;
+    updated?: string;
 }
   
 export type CommentAppSyncEvent = {

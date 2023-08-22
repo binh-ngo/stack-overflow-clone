@@ -20,6 +20,7 @@ import { CreateQuestion } from "./pages/CreateQuestion";
 import { ddbCreateQuestion, ddbUpdateQuestion } from "./graphql";
 import { EditQuestion } from "./pages/EditPost";
 import ReadonlyPage from "./pages/ReadOnlyPage";
+import { AllQuestionsFromOneUser } from "./pages/AllQuestionsFromOneUser";
 // import RequireAuth from "./RequireAuth";
 Amplify.configure(awsconfig);
 
@@ -43,6 +44,7 @@ function App() {
               {/* <Route path="/questions/:author/:quesId" element={<SingleQuestion />} /> */}
               <Route path="/tags" element={<AllTags />} />
               <Route path="/users" element={<AllUsers />} />
+              <Route path="/users/:author" element={<AllQuestionsFromOneUser />} />
               <Route path="/companies" element={<AllCompanies />} />
               <Route path="/" element={<LandingPage />} />
               {/* <Route path="*" element={<Navigate to="/" />} /> */}

@@ -88,8 +88,8 @@ const ddbGetQuestionById = async (author: string, quesId: string) => {
 // =========
 
 const getAllQuestionsQuery = `
-query getAllQuestions {
-  getAllQuestions(author: "stackOverflow-admin") {
+query getAllQuestions($author: String!) {
+  getAllQuestions(author: $author) {
     author
     title
     body
@@ -103,15 +103,44 @@ query getAllQuestions {
 }
 `;
 
-const ddbGetAllQuestions = async () => {
+const ddbGetAllQuestions = async (author: string) => {
   const resp = await API.graphql({ 
     query: getAllQuestionsQuery,
+    variables: {
+      author
+    },
     authMode: "API_KEY"
   });
   console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
   // @ts-ignore
   return resp.data.getAllQuestions;
 };
+
+const getAllQuestionsFromAllUsersQuery = `
+query getAllQuestionsFromAllUsers {
+  getAllQuestionsFromAllUsers {
+    author
+    title
+    body
+    quesId
+    points
+    views
+    createdAt
+    updatedAt
+    tags
+  }
+}
+`;
+const ddbGetAllQuestionsFromAllUsers = async () => {
+  const resp = await API.graphql({ 
+    query: getAllQuestionsFromAllUsersQuery,
+    authMode: "API_KEY"
+  });
+  console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
+  // @ts-ignore
+  return resp.data.getAllQuestionsFromAllUsers;
+};
+
 
 // ===========
 // UPDATE POST
@@ -174,7 +203,7 @@ const ddbDeleteQuestion = async (quesId: string, author: string) => {
   });
   // console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
   // @ts-ignore
-  console.log(`successfully deleted postId: ${resp.data.deletePost}`);
+  console.log(`successfully deleted: ${resp.data.deletePost}`);
 };
 
 export {
@@ -183,4 +212,5 @@ export {
   ddbGetQuestionById,
   ddbUpdateQuestion,
   ddbDeleteQuestion,
+  ddbGetAllQuestionsFromAllUsers
 };

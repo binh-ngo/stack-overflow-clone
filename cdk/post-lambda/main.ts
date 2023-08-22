@@ -3,6 +3,7 @@ import deleteQuestion from "./questions/deleteQuestion";
 import getQuestionById from "./questions/getQuestionById";
 import getAllQuestions from "./questions/getAllQuestions";
 import updateQuestion from "./questions/updateQuestion";
+import getAllQuestionsFromAllUsers from "./questions/getAllQuestionsFromAllUsers";
 
 import createAnswer from "./answers/createAnswer";
 import deleteAnswer from "./answers/deleteAnswer";
@@ -40,6 +41,7 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" {
   switch (event.info.fieldName) {
     case "getQuestionById":
     case "getAllQuestions":
+    case "getAllQuestionsFromAllUsers":
     case "createQuestion":
     case "updateQuestion":
     case "deleteQuestion":
@@ -65,11 +67,13 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" {
 function handleQuestionEvent(event: QuestionAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getQuestionById":
-      console.log(`QUESTION ---${JSON.stringify(event)}`);
+      // console.log(`QUESTION ---${JSON.stringify(event)}`);
       return getQuestionById(event.arguments.author!, event.arguments.quesId!);
     case "getAllQuestions":
-      console.log(`QUESTION ---${JSON.stringify(event)}`);
+      // console.log(`QUESTION ---${JSON.stringify(event)}`);
       return getAllQuestions(event.arguments.author!);
+    case "getAllQuestionsFromAllUsers":
+      return getAllQuestionsFromAllUsers();
     case "createQuestion":
       return createQuestion(event.arguments.question!);
     case "updateQuestion":

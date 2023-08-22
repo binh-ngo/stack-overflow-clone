@@ -154,6 +154,10 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Query",
+        fieldName: "getAllQuestionsFromAllUsers",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
         fieldName: "getQuestionById",
       });
       postDataSource.createResolver({

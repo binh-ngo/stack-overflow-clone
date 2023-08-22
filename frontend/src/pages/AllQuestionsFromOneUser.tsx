@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react';
-import { ddbGetAllQuestionsFromAllUsers } from "../graphql"
+import { ddbGetAllQuestions } from "../graphql"
 import { Card } from '../components/Card';
 import { ddbGetAllQueryResponse } from '../types';
 import { AskQuestionButton } from '../components/AskQuestionButton';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
 
 
-export const AllQuestions = () => {
+export const AllQuestionsFromOneUser = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
   const [value, setValue] = useState({});
+  const { author = '' } = useParams<{ author?: string }>(); // Provide default value
 
   useEffect(() => {
     const fetchQuestions = async () => {
-        const response = await ddbGetAllQuestionsFromAllUsers();
+        const response = await ddbGetAllQuestions(author);
         setQuestions(response); // Set questions directly to the API response
         setValue(response.body); // Assuming you want to set the entire response here
         console.log(response);
     };
     fetchQuestions();
-}, []);
+}, [author]);
 
 const renderQuestions = () => {
   const sortedQuestions = questions.sort(
