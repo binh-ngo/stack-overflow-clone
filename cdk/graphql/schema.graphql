@@ -189,8 +189,8 @@ schema {
   input QuestionInput {
     title: String!
     body: String!
-    author: String
-    tags: [String]
+    author: String!
+    tags: [String]!
 }
 
 input AnswerInput {

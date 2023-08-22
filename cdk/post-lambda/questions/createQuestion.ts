@@ -9,8 +9,6 @@ const createQuestion = async (questionInput: QuestionInput) => {
     );
 
     const quesId = new Date().toISOString();
-    // TODO: userAuth
-    // const author = loggedinUser()
 
     const question: Question = {
         quesId: quesId,
@@ -29,7 +27,7 @@ const createQuestion = async (questionInput: QuestionInput) => {
         downvotedBy: null
     };
 
-const formattedAuthor = questionInput.author.trim().replace(/\s+/g, "");
+const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
 const params = {
     TableName: process.env.POSTS_TABLE,
     Item: {
@@ -68,6 +66,7 @@ const params = {
         //     ]
         // }).promise();     
         await docClient.put(params).promise();
+        console.log(`Created question: ${JSON.stringify(question, null, 2)}`);
         return question;
 
     } catch (err) {

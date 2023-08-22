@@ -17,7 +17,7 @@ import getCommentById from "./comments/getCommentById";
 import getAllComments from "./comments/getAllComment";
 import updateComment from "./comments/updateComment";
 
-import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent } from "./types";
+import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput } from "./types";
 
 export async function handler(event: any): Promise<any> {
   console.log(`EVENT --- ${JSON.stringify(event)}`);
@@ -75,7 +75,13 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
     case "getAllQuestionsFromAllUsers":
       return getAllQuestionsFromAllUsers();
     case "createQuestion":
-      return createQuestion(event.arguments.question!);
+      const questionInput: QuestionInput = {
+        title: event.arguments.question!.title,
+        body: event.arguments.question!.body,
+        author: event.arguments.question!.author,
+        tags: event.arguments.question!.tags,
+      };
+      return createQuestion(questionInput);
     case "updateQuestion":
       return updateQuestion(
         event.arguments.author!,
