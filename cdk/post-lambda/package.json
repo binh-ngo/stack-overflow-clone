@@ -12,6 +12,7 @@
   "types": "./main.d.ts",
   "dependencies": {
     "dotenv": "^16.3.1",
+    "@aws-sdk/lib-dynamodb": "^3.398.0",
     "ulid": "^2.3.0"
   }
 }

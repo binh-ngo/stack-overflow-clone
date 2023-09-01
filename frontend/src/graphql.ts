@@ -35,9 +35,9 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
       query: createQuestionQuery,
       variables: {
         question: {
-          author: question.author,
           title: question.title,
           body: bodyString,
+          author: question.author,
           tags: question.tags
         },
       },
@@ -48,8 +48,35 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
   
 
 // ==============
-// GET Question BY ID
+// GET Question with Answers and Comments
 // ==============
+
+const getQuestionWithAnswersAndCommentsQuery = `
+    query getQuestionWithAnswersAndComments($quesId: String!) {
+      getQuestionWithAnswersAndComments(quesId: $quesId) {
+        author
+        body
+        quesId
+        createdAt
+      }
+    }
+  `;
+
+const ddbGetQuestionWithAnswersAndComments = async (quesId: string) => {
+  const resp = await API.graphql({
+    query: getQuestionWithAnswersAndCommentsQuery,
+    variables: {
+      quesId,
+    },
+    authMode: "API_KEY"
+  });
+  // console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
+  // @ts-ignore
+  const data = resp.data.getQuestionWithAnswersAndComments;
+  // console.log(`post.content: ${post.content}`);
+  return data;
+};
+
 
 const getQuestionByIdQuery = `
     query getQuestionById($author: String!, $quesId: String!) {
@@ -67,16 +94,20 @@ const getQuestionByIdQuery = `
     }
   `;
 
+  // ==============
+// GET Question By ID
+// ==============
+
 const ddbGetQuestionById = async (author: string, quesId: string) => {
   const resp = await API.graphql({
     query: getQuestionByIdQuery,
     variables: {
-      quesId,
       author,
+      quesId,
     },
     authMode: "API_KEY"
   });
-  // console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
+  console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
   // @ts-ignore
   const question = resp.data.getQuestionById;
   // console.log(`post.content: ${post.content}`);
@@ -107,7 +138,7 @@ const ddbGetAllQuestions = async (author: string) => {
   const resp = await API.graphql({ 
     query: getAllQuestionsQuery,
     variables: {
-      author
+      author: author
     },
     authMode: "API_KEY"
   });
@@ -178,7 +209,40 @@ const ddbUpdateQuestion = async (question: SaveQuestionProps) => {
     authMode: "AMAZON_COGNITO_USER_POOLS",
   });
   console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
-  // TODO: log resp code here
+};
+
+const createAnswerQuery = `
+    mutation updateQuestion($author: String!, $quesId: String!, $question: QuestionInput!) {
+      updateQuestion(author: $author, quesId: $quesId, question: $question) {
+        author
+        body
+        createdAt
+        quesId
+        title
+        updatedAt
+        views
+        tags
+      }
+    }
+  `;
+
+const ddbCreateAnswer = async (question: SaveQuestionProps) => {
+  const contentString = JSON.stringify(question.body);
+  // console.log(`contentString: ${contentString}`);
+  const resp = await API.graphql({
+    query: createAnswerQuery,
+    variables: {
+      author: question.author,
+      postId: question.quesId,
+      post: {
+        author: question.author,
+        title: question.title,
+        body: contentString,
+      },
+    },
+    authMode: "AMAZON_COGNITO_USER_POOLS",
+  });
+  console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
 };
 
 // ===========
@@ -212,5 +276,7 @@ export {
   ddbGetQuestionById,
   ddbUpdateQuestion,
   ddbDeleteQuestion,
-  ddbGetAllQuestionsFromAllUsers
+  ddbGetAllQuestionsFromAllUsers,
+  ddbCreateAnswer,
+  ddbGetQuestionWithAnswersAndComments
 };

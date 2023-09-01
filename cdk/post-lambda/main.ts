@@ -17,7 +17,9 @@ import getCommentById from "./comments/getCommentById";
 import getAllComments from "./comments/getAllComment";
 import updateComment from "./comments/updateComment";
 
-import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput } from "./types";
+import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, Answer } from "./types";
+// import appendAnswer from "./answers/appendAnswer";
+import getQuestionWithAnswersAndComments from "./questions/getQuestionWithAnswersAndComments";
 
 export async function handler(event: any): Promise<any> {
   console.log(`EVENT --- ${JSON.stringify(event)}`);
@@ -42,6 +44,7 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" {
     case "getQuestionById":
     case "getAllQuestions":
     case "getAllQuestionsFromAllUsers":
+    case "getQuestionWithAnswersAndComments":
     case "createQuestion":
     case "updateQuestion":
     case "deleteQuestion":
@@ -74,6 +77,8 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
       return getAllQuestions(event.arguments.author!);
     case "getAllQuestionsFromAllUsers":
       return getAllQuestionsFromAllUsers();
+    case "getQuestionWithAnswersAndComments":
+      return getQuestionWithAnswersAndComments(event.arguments.quesId!);
     case "createQuestion":
       const questionInput: QuestionInput = {
         title: event.arguments.question!.title,
@@ -96,14 +101,18 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
 }
 
 // Handler function for answer events
-function handleAnswerEvent(event: AnswerAppSyncEvent) {
+async function handleAnswerEvent(event: AnswerAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getAnswerById":
       return getAnswerById(event.arguments.author!, event.arguments.ansId!);
     case "getAllAnswers":
       return getAllAnswers(event.arguments.author!);
     case "createAnswer":
-      return createAnswer(event.arguments.quesId!, event.arguments.answer!);
+      // const createdAnswer = await createAnswer(event.arguments.quesAuthor!, event.arguments.quesId!, event.arguments.answer!);
+      // if (createdAnswer) {
+      //   await appendAnswer(createdAnswer.quesAuthor!, createdAnswer.quesId!, createdAnswer);
+      // }
+      return createAnswer(event.arguments.quesAuthor!, event.arguments.quesId!, event.arguments.answer!);
     case "updateAnswer":
       return updateAnswer(
         event.arguments.author!,
@@ -122,6 +131,8 @@ function handleCommentEvent(event: CommentAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getCommentById":
       return getCommentById(event.arguments.author!, event.arguments.commId!);
+    case "getAllComments":
+      return getAllComments(event.arguments.author!);
     case "getAllComments":
       return getAllComments(event.arguments.author!);
     case "createComment":

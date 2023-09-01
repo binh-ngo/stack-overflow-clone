@@ -6,7 +6,7 @@ import {
     StackProps,
   } from "aws-cdk-lib";
   import { IUserPool } from "aws-cdk-lib/aws-cognito";
-  import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
+  import { AttributeType, BillingMode, ProjectionType, Table } from "aws-cdk-lib/aws-dynamodb";
   import {
     AuthorizationType,
     FieldLogLevel,
@@ -43,7 +43,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       new CfnOutput(this, "StackOverflowPostsTableName", {
         value: postsTable.tableName,
       });
-  
+
       const usersTable = new Table(this, "StackOverflowUsersTable", {
         billingMode: BillingMode.PAY_PER_REQUEST,
         partitionKey: {
@@ -158,6 +158,10 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
       postDataSource.createResolver({
         typeName: "Query",
+        fieldName: "getQuestionWithAnswersAndComments",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
         fieldName: "getQuestionById",
       });
       postDataSource.createResolver({
@@ -247,10 +251,27 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         fieldName: "updateComment",
       });
 
-      // Other 
+      // Tags
+
       postDataSource.createResolver({
         typeName: "Query",
         fieldName: "getAllTags",
+      });
+      postDataSource.createResolver({
+        typeName: "Query",
+        fieldName: "getTagById",
+      });
+      postDataSource.createResolver({
+        typeName: "Mutation",
+        fieldName: "createTag",
+      });
+      postDataSource.createResolver({
+        typeName: "Mutation",
+        fieldName: "deleteTag",
+      });
+      postDataSource.createResolver({
+        typeName: "Mutation",
+        fieldName: "updateTag",
       });
     }
   }

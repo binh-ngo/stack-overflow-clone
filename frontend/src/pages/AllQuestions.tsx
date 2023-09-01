@@ -8,13 +8,11 @@ import moment from 'moment';
 
 export const AllQuestions = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
-  const [value, setValue] = useState({});
 
   useEffect(() => {
     const fetchQuestions = async () => {
         const response = await ddbGetAllQuestionsFromAllUsers();
         setQuestions(response); // Set questions directly to the API response
-        setValue(response.body); // Assuming you want to set the entire response here
         console.log(response);
     };
     fetchQuestions();
@@ -39,7 +37,6 @@ const renderQuestions = () => {
           comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
-          value={value}
         />
       ))}
     </div>

@@ -1,73 +1,77 @@
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 const docClient = new DynamoDB.DocumentClient();
+import { ulid } from "ulid";
 import { Answer, AnswerInput } from "../types";
 
-const createAnswer = async (quesId: string, answerInput: AnswerInput) => {
+const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: AnswerInput) => {
     console.log(
         `createAnswer invocation event: ${JSON.stringify(answerInput, null, 2)}`
     );
 
-    const ansId = new Date().toISOString();
+    const ansId = ulid();
 
     const answer: Answer = {
-        ansId,
-        quesId,
-        author: answerInput.author,
+        ansId: `ANSWER#${ansId}`,
+        quesId: quesId,
+        quesAuthor: quesAuthor,
+        author: `AUTHOR#${answerInput.author}`,
         body: answerInput.body,
         points: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        comments: null,
         upvotedBy: null,
         downvotedBy: null
     };
-    const formattedAuthor = answerInput.author.trim().replace(/\s+/g, "");
+    const formattedAuthor = answerInput.author ? answerInput.author.trim().replace(/\s+/g, "") : "";
 
     const params = {
         TableName: process.env.POSTS_TABLE,
         Item: {
-          PK: `ANSWER#${formattedAuthor}`,
-          SK: ansId,
-          type: "question",
-          ...answer,
+            PK: `AUTHOR#${formattedAuthor}`,
+            SK: `ANSWER#${ansId}`,
+            type: "answer",
+            ...answer,
         },
         ReturnConsumedCapacity: "TOTAL",
-      };
-        try {
-            // await docClient.transactWrite({
-            //     TransactItems: [{
-            //         Put: {
-            //             TableName: process.env.POSTS_TABLE,
-            //             Item: {
-            //                 PK: `QUESTION#${questionInput.author}`,
-            //                 SK: quesId,
-            //                 ...question,
-            //             },
-            //             ReturnConsumedCapacity: "TOTAL",
-            //         }
-            //     }, {
-            //         Update: {
-            //             TableName: process.env.USERS_TABLE,
-            //             Key: {
-            //                 author: questionInput.author
-            //             },
-            //             UpdateExpression: 'ADD totalQuestions :one',
-            //             ExpressionAttributeValues: {
-            //                 ':one': 1
-            //             },
-            //             ConditionExpression: 'attribute_exists(author)'
-            //         }
-            //     }
-            //     ]
-            // }).promise();     
-            await docClient.put(params).promise();
-        return answer;
+    };
 
+    try {
+        await docClient.put(params).promise();
+        console.log(`Created answer: ${JSON.stringify(answer, null, 2)}`);
+        return answer;
     } catch (err) {
         console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
-
         return null;
     }
 };
 
 export default createAnswer;
+
+        //     await docClient.transactWrite({
+        //         TransactItems: [{
+        //             Put: {
+        //                 TableName: process.env.POSTS_TABLE,
+        //                 Item: {
+        //                     PK: `AUTHOR#${answerInput.author}`,
+        //                     SK: `ANSWER#${ansId}`,
+        //                     ...answer,
+        //                 },
+        //                 ReturnConsumedCapacity: "TOTAL",
+        //             }
+        //         }, {
+        //             Update: {
+        //                 TableName: process.env.POSTS_TABLE,
+        //                 Key: {
+        //                     PK: `AUTHOR#${quesAuthor}`,
+        //                     SK: `QUESTION#${quesId}`,
+        //                 },
+        //                 UpdateExpression: 'SET answers = list_append(if_not_exists(answers, :empty_list), :answer)',
+        //                 ExpressionAttributeValues: {
+        //                     ':empty_list': [],
+        //                     ':answer': [answer],
+        //                 },
+        //                 ConditionExpression: 'attribute_exists(PK)',
+        //             }
+        //         }
+        //         ]
+        //     }).promise(); 

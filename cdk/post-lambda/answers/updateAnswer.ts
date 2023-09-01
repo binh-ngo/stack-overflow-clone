@@ -18,7 +18,6 @@ const updateAnswer = async (
 
     const answer: QuestionUpdateableFields = {
         body: answerInput.body,
-        updatedAt: new Date().toISOString(),
     };
 
     console.log(`UPDATE answer called with:` + JSON.stringify(` UserPK: ${author} and UserSk: ${ansId}`));
@@ -28,18 +27,16 @@ const updateAnswer = async (
     const params = {
         TableName: process.env.POSTS_TABLE,
         Key: {
-            PK: `ANSWER#${author}`,
-            SK: ansId,
+            PK: `AUTHOR#${author}`,
+            SK: `ANSWER${ansId}`,
         },
         UpdateExpression:
-            "set  #body = :body, #updatedAt = :updatedAt",
+            "set  #body = :body",
         ExpressionAttributeNames: {
             "#body": "body",
-            "#updatedAt": "updatedAt",
         },
         ExpressionAttributeValues: {
             ":body": answer.body,
-            ":updatedAt": answer.updatedAt,
         },
         ReturnValues: "ALL_NEW",
         ReturnConsumedCapacity: "TOTAL",

@@ -6,15 +6,19 @@ schema {
     getAllQuestions(author: String!): [Question] 
     getAllQuestionsFromAllUsers: [Question]
     getQuestionById(author: String!, quesId: String!): Question
-    # getAllAnswers(author: String!): [Answer] 
-    # getAnswerById(author: String!, ansId: String!): Answer
+    getQuestionWithAnswersAndComments(quesId: String!): [QuestionWithAnswersAndComments]
+
+    getAllAnswers(author: String!): [Answer] 
+    getAnswerById(author: String!, ansId: String!): Answer
 
     # getAllComments(author: String!): [Comment] 
     # getCommentById(author: String!, commId: String!): Comment
 
     # getUser(username: String!): User!
     # getAllUsers: [UserList]!
-    # getAllTags: [Tag]!
+    
+    getTagById(tagName: String!) Tag
+    getAllTags: [Tag]
   }
 
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
@@ -32,13 +36,14 @@ schema {
     voteQuestion(quesId: String!, voteType: VoteType!): Question! @aws_cognito_user_pools
 
     # TODO: answer lambdas for crud functionality
-    createAnswer(quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
+    createAnswer(quesAuthor: String!, quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
+    # appendAnswer(quesAuthor: String!, quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
     deleteAnswer(author: String!, ansId: String!): String @aws_cognito_user_pools
     updateAnswer(
       author: String!
       ansId: String!
       answer: AnswerInput!
-    ): Question @aws_cognito_user_pools
+    ): Answer @aws_cognito_user_pools
     
     voteAnswer(quesId: String!, ansId: String!, voteType: VoteType!): Answer!
     acceptAnswer(quesId: String!, ansId: String!): Question!
@@ -50,9 +55,16 @@ schema {
       author: String!,
       commId: String!, 
       comment: CommentInput!
-    ): Comment @aws_cognito_user_pools
+    ): Comment @aws_cognito_user_pools  
   }
-
+  
+    createTag(question: QuestionInput): Tag @aws_cognito_user_pools
+    deleteTag(tagName: string, tagId: string): String @aws_cognito_user_pools
+    updateTag(
+      tagName: String!
+      tagId: String!
+      tagInput: TagInput!
+    ): Tag @aws_cognito_user_pools
 
   enum RoleType {
     USER
@@ -111,11 +123,11 @@ schema {
     totalAnswers: Int!
   }
 
-  type UserList {
-    id: ID!
-    username: String!
-    createdAt: AWSDateTime!
-  }
+  # type UserList {
+  #   id: ID!
+  #   username: String!
+  #   createdAt: AWSDateTime!
+  # }
 
   type Comment @aws_api_key @aws_cognito_user_pools {
     commId: ID!
@@ -131,7 +143,7 @@ schema {
     quesId: ID!
     author: String!
     body: String!
-    comments: [Comment]!
+    comments: [Comment]
     points: Int!
     upvotedBy: [ID]!
     downvotedBy: [ID]!
@@ -139,19 +151,19 @@ schema {
     updatedAt: AWSDateTime!
   }
 
-  type QuestionList {
-    quesId: ID!
-    author: String!
-    title: String!
-    body: String!
-    tags: [String!]!
-    points: Int!
-    views: Int!
-    answers: [Answer]!
-    answerCount: Int!
-    createdAt: AWSDateTime!
-    updatedAt: AWSDateTime!
-  }
+  # type QuestionList {
+  #   quesId: ID!
+  #   author: String!
+  #   title: String!
+  #   body: String!
+  #   tags: [String!]!
+  #   points: Int!
+  #   views: Int!
+  #   answers: [Answer]!
+  #   answerCount: Int!
+  #   createdAt: AWSDateTime!
+  #   updatedAt: AWSDateTime!
+  # }
 
   type Question @aws_api_key @aws_cognito_user_pools  {
     quesId: ID!
@@ -162,28 +174,30 @@ schema {
     points: Int!
     views: Int!
     acceptedAnswer: ID
-    comments: [Comment]!
-    answers: [Answer]!
     upvotedBy: [ID]!
     downvotedBy: [ID]!
     createdAt: AWSDateTime!
     updatedAt: AWSDateTime!
   }
 
-  type NextPrevPage {
-    page: Int!
-    limit: Int!
-  }
+  # type NextPrevPage {
+  #   page: Int!
+  #   limit: Int!
+  # }
 
-  type PaginatedQuesList {
-    questions: [QuestionList]!
-    next: NextPrevPage
-    previous: NextPrevPage
-  }
+  # type PaginatedQuesList {
+  #   questions: [QuestionList]!
+  #   next: NextPrevPage
+  #   previous: NextPrevPage
+  # }
 
   type Tag {
     tagName: String!
     count: Int!
+  }
+
+  type TagInput {
+    tagName: String!
   }
 
   input QuestionInput {
@@ -202,7 +216,16 @@ input CommentInput  {
     author: String!;
 }
 
-input OrderByInput {
-  field: String!
-  order: OrderDirection!
+# input OrderByInput {
+#   field: String!
+#   order: OrderDirection!
+# }
+
+type QuestionWithAnswersAndComments {
+  quesId: String
+  createdAt: String
+  SK: String
+  PK: String
+  author: String
+  body: String
 }

@@ -1,20 +1,12 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ddbCreateQuestion, SaveQuestionProps } from "../graphql";
+import { ddbCreateQuestion } from "../graphql";
 import Editor from "../components/Lexical/Editor.js";
 import { Auth } from "aws-amplify";
 import "../components/Lexical/styles.css"
-
-type CreateQuestionProps = {
-  // onSave: (title: string, content: string) => void;
-  onSave: (question: SaveQuestionProps) => void;
-  title?: string;
-  children?: any;
-  quesId?: string;
-};
+import { CreateQuestionProps } from "../types";
 
 export const CreateQuestion = (props: CreateQuestionProps) => {
-  const [quesId, setQuesId] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [children, setChildren]: any = useState(props.children);
@@ -41,10 +33,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
     if (props.children) {
       setChildren(props.children);
     }
-    if (props.quesId) {
-      setQuesId(props.quesId);
-    }
-  }, [props.title, props.children, props.quesId]);
+  }, [props.title, props.children]);
 
   function stringofTags(inputString: string): string[] {
     const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
@@ -52,22 +41,20 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
 
     return tagsArray;
   }
-
+ 
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
     if (title && children) {
       console.log("onSave called");
       // console.log(`children: ${JSON.stringify(children, null, 2)}`);
-      console.log(`onSave called with quesId: ${quesId}`);
-      props.onSave({ title, body: children, quesId });
+      props.onSave({ title, body: children });
       setSuccessfulSave(true);
-      
       // console.log(`This is the question: ${JSON.stringify(question)}`);
       const question = {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,
-        body: children,
-        tags: stringofTags(tags),
+        body: children, 
+        tags: tags.trim() ? stringofTags(tags) : [],
       };
       try {
         const response = await ddbCreateQuestion(question); // Make the DynamoDB API call here
@@ -99,10 +86,10 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             id="title"
             value={title}
             onChange={(event) => {
-              setTitle(event.target.value);
+            setTitle(event.target.value);
             }}
-          ></input>
-
+          >
+          </input>
         </div>
         <div className="flex flex-row justify-center items-center w-full my-8">
           <label className="text-4xl text-orange-500 font-bold mb-2 border-b-2 border-orange-500 items-center justify-center" htmlFor="title">Tags:</label>
@@ -112,7 +99,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             id="tags"
             value={tags}
             onChange={(event) => {
-              setTags(event.target.value);
+            setTags(event.target.value);
             }}
           ></input>
         </div>

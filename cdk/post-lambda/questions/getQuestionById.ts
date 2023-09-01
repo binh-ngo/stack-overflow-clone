@@ -2,7 +2,36 @@ const AWS = require("aws-sdk");
 require('dotenv').config()
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const getQuestionsById = async (author: string, quesId: string) => {
+const incrementViews = async (author:string, quesId:string) => {
+console.log(`invoking incrementViews on question (${author}, ${quesId})`)
+  const updateViewsParams = {
+    TableName: process.env.POSTS_TABLE,
+    Key: {
+      PK: author,
+      SK: quesId    
+    },
+    UpdateExpression: "SET #views = #views + :i",
+    ExpressionAttributeNames: {
+      "#views": "views",
+      ":i": 1
+    },
+    ReturnValues: "UPDATED_NEW"
+  }
+  
+  try {
+    const updatedQuestion = await docClient.update(updateViewsParams).promise();
+
+    console.log(`updatedQuestion: ${JSON.stringify(updatedQuestion, null, 2)}`);
+
+    return updatedQuestion.Attributes;
+} catch (err) {
+    console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
+
+    return null;
+}
+}
+
+const getQuestionById = async (author: string, quesId: string) => {
   console.log(`getQuestionsById called with: (${author}, ${quesId})`);
 
   if (!quesId) {
@@ -12,17 +41,17 @@ const getQuestionsById = async (author: string, quesId: string) => {
   const params = {
     TableName: process.env.POSTS_TABLE,
     Key: {
-      PK: `AUTHOR#${author}`,
-      SK: `QUESTION#${quesId}`,
+      PK: author,
+      SK: quesId,
     },
     ReturnConsumedCapacity: "TOTAL",
   };
-
+  
   try {
     const data = await docClient.get(params).promise();
 
     console.log(`data: ${JSON.stringify(data, null, 2)}`);
-
+    incrementViews(author, quesId);
     return data.Item;
 
     } catch (err) {
@@ -32,4 +61,5 @@ const getQuestionsById = async (author: string, quesId: string) => {
   }
 };
 
-export default getQuestionsById;
+
+export default getQuestionById;

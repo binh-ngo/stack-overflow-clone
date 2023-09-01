@@ -9,14 +9,12 @@ import { useParams } from 'react-router-dom';
 
 export const AllQuestionsFromOneUser = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
-  const [value, setValue] = useState({});
   const { author = '' } = useParams<{ author?: string }>(); // Provide default value
 
   useEffect(() => {
     const fetchQuestions = async () => {
         const response = await ddbGetAllQuestions(author);
         setQuestions(response); // Set questions directly to the API response
-        setValue(response.body); // Assuming you want to set the entire response here
         console.log(response);
     };
     fetchQuestions();
@@ -41,7 +39,6 @@ const renderQuestions = () => {
           comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
-          value={value}
         />
       ))}
     </div>

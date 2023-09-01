@@ -17,7 +17,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { awsconfig } from "./aws-exports";
 import { Amplify } from "aws-amplify"
 import { CreateQuestion } from "./pages/CreateQuestion";
-import { ddbCreateQuestion, ddbUpdateQuestion } from "./graphql";
+import { ddbCreateAnswer, ddbCreateQuestion, ddbUpdateQuestion } from "./graphql";
 import { EditQuestion } from "./pages/EditPost";
 import ReadonlyPage from "./pages/ReadOnlyPage";
 import { AllQuestionsFromOneUser } from "./pages/AllQuestionsFromOneUser";
@@ -35,7 +35,7 @@ function App() {
           <div className="flex flex-row h-screen">
             <Sidenav />
             <Routes>
-              <Route path="/questions/:quesId/:author" element={<ReadonlyPage />} />
+              <Route path="/question" element={<ReadonlyPage onSave={ddbCreateAnswer} />} />
               <Route path="/edit/questions/:quesId/:author" element={<EditQuestion onSave={ddbUpdateQuestion}/>} />
               <Route path="/questions" element={<AllQuestions />} />
               {/* <RequireAuth> */}

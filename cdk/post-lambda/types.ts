@@ -1,7 +1,8 @@
 export type ddbQueryPostsParams = {
     TableName: string;
+    IndexName?: string;
     KeyConditionExpression?: string;
-    ExpressionAttributeNames: { [key: string]: string };
+    ExpressionAttributeNames?: { [key: string]: string };
     ExpressionAttributeValues: { [key: string]: any };
     FilterExpression?: string;
     ReturnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
@@ -13,14 +14,12 @@ export type Question = {
     author: string;
     title: string;
     body: string;
-    tags: [string];
     points: number;
     views: number;
+    tags: string[] | null;
     acceptedAnswer: string | null;
-    comments: [string] | null;
-    answers: [string] | null;
-    upvotedBy: [string] | null;
-    downvotedBy: [string] | null;
+    upvotedBy: string[] | null;
+    downvotedBy: string[] | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -38,13 +37,13 @@ export type QuestionInput = {
     title: string;
     body: string;
     author: string;
-    tags: [string];
+    tags: string[];
 }
 
 export type QuestionUpdateableFields = {
         title?: string;
         body?: string;
-        tags?: [string];
+        tags?: string[];
         updatedAt?: string;
         views?: number;
 };
@@ -63,26 +62,25 @@ export type QuestionAppSyncEvent = {
 export type Answer = {
     ansId: string;
     quesId: string;
+    quesAuthor: string;
     author: string;
     body: string;
-    comments: [string] | null;
     points: number;
-    upvotedBy: [string] | null;
-    downvotedBy: [string] | null;
+    upvotedBy: string[] | null;
+    downvotedBy: string[] | null;
     createdAt: string;
     updatedAt: string;
 }
 
 export type AnswerUpdateableFields = {
-    body?: string;
-    updatedAt?: string;
+    body: string;
 };
 
 export type AnswerInput = {
     quesId?: string;
+    quesAuthor?: string;
     body: string;
     author: string;
-    updated?: string;
 }
 
 export type AnswerAppSyncEvent = {
@@ -91,6 +89,7 @@ export type AnswerAppSyncEvent = {
   };
   arguments: {
     author?: string;
+    quesAuthor?: string;
     ansId?: string;
     quesId?: string;
     answer?: AnswerInput;
@@ -103,8 +102,8 @@ export type Comment = {
     author: string;
     body: string;
     points: number;
-    upvotedBy: [string] | null;
-    downvotedBy: [string] | null;
+    upvotedBy: string[] | null;
+    downvotedBy: string[] | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -134,3 +133,7 @@ export type CommentAppSyncEvent = {
   };
 };
 
+export type Tag = {
+  tagName: string;
+  count: number;
+}

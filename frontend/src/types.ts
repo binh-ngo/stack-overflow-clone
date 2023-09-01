@@ -1,3 +1,5 @@
+import { SaveQuestionProps } from "./graphql";
+
 type ddbGetAllQueryResponse = {
   author: string;
   title: string;
@@ -79,4 +81,11 @@ type User = {
   },
 };
 
-export type { Answer, Comment, Question, User, ddbGetAllQueryResponse };
+type CreateQuestionProps = {
+  onSave: (question: SaveQuestionProps) => void;
+  title?: string;
+  children?: any;
+  quesId?: string;
+};
+
+export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, CreateQuestionProps };

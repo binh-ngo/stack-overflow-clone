@@ -26,6 +26,7 @@ const createComment = async (parentId: string, commentInput: CommentInput) => {
         Item: {
             PK: `COMMENT#${commentInput.author}`,
             SK: commId,
+            type: "comment",
             ...comment,
         },
         ReturnConsumedCapacity: "TOTAL",

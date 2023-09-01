@@ -1,6 +1,8 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
+import { ulid } from "ulid";
 import { Question, QuestionInput } from "../types";
+import createTag from "../tags/createTags";
 require("dotenv").config({ path: ".env" });
 
 const createQuestion = async (questionInput: QuestionInput) => {
@@ -8,11 +10,12 @@ const createQuestion = async (questionInput: QuestionInput) => {
         `createQuestion invocation event: ${JSON.stringify(questionInput, null, 2)}`
     );
 
-    const quesId = new Date().toISOString();
+    const quesId = ulid();
+     const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
 
     const question: Question = {
-        quesId: quesId,
-        author: questionInput.author,
+        quesId: `QUESTION#${quesId}`,
+        author: `AUTHOR#${formattedAuthor}`,
         title: questionInput.title,
         body: questionInput.body,
         tags: questionInput.tags,
@@ -21,58 +24,43 @@ const createQuestion = async (questionInput: QuestionInput) => {
         acceptedAnswer: null,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        comments: null,
-        answers: null,
         upvotedBy: null,
         downvotedBy: null
     };
 
-const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
-const params = {
-    TableName: process.env.POSTS_TABLE,
-    Item: {
-      PK: `AUTHOR#${formattedAuthor}`,
-      SK: `QUESTION#${quesId}`,
-      type: "question",
-      ...question,
-    },
-    ReturnConsumedCapacity: "TOTAL",
-  };
+    const params = {
+        RequestItems: {
+            "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": [
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `QUESTION#${quesId}`,
+                            SK: `QUESTION#${quesId}`,
+                            type: 'question',
+                            ...question,
+                        },
+                    },
+                },
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `AUTHOR#${formattedAuthor}`,
+                            SK: `QUESTION#${quesId}`,
+                            type: 'question',
+                            ...question,
+                        },
+                    },
+                },
+            ],
+        },
+        ReturnConsumedCapacity: "TOTAL",
+    };
+
     try {
-        // await docClient.transactWrite({
-        //     TransactItems: [{
-        //         Put: {
-        //             TableName: process.env.POSTS_TABLE,
-        //             Item: {
-        //                 PK: `QUESTION#${questionInput.author}`,
-        //                 SK: quesId,
-        //                 ...question,
-        //             },
-        //             ReturnConsumedCapacity: "TOTAL",
-        //         }
-        //     }, {
-        //         Update: {
-        //             TableName: process.env.USERS_TABLE,
-        //             Key: {
-        //                 author: questionInput.author
-        //             },
-        //             UpdateExpression: 'ADD totalQuestions :one',
-        //             ExpressionAttributeValues: {
-        //                 ':one': 1
-        //             },
-        //             ConditionExpression: 'attribute_exists(author)'
-        //         }
-        //     }
-        //     ]
-        // }).promise();     
-        await docClient.put(params).promise();
-        console.log(`Created question: ${JSON.stringify(question, null, 2)}`);
-        return question;
-
+        const data = await docClient.batchWrite(params).promise();
+        console.log("Success", data);
     } catch (err) {
-        console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
-
-        return null;
+        console.log("Error", err);
     }
 };
 

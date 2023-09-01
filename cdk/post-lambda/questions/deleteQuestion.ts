@@ -5,8 +5,8 @@ const deleteQuestion = async (author: string, quesId: string) => {
   const params = {
     TableName: process.env.POSTS_TABLE,
     Key: {
-      PK: `AUTHOR#${author}`,
-      SK: `QUESTION#${quesId}`,
+      PK: author,
+      SK: quesId,
     },
     ReturnConsumedCapacity: "TOTAL",
   };
