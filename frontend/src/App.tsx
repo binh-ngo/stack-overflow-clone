@@ -17,7 +17,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { awsconfig } from "./aws-exports";
 import { Amplify } from "aws-amplify"
 import { CreateQuestion } from "./pages/CreateQuestion";
-import { ddbCreateAnswer, ddbCreateQuestion, ddbUpdateQuestion } from "./graphql";
+import { ddbCreateAnswer, ddbUpdateQuestion } from "./graphql";
 import { EditQuestion } from "./pages/EditPost";
 import ReadonlyPage from "./pages/ReadOnlyPage";
 import { AllQuestionsFromOneUser } from "./pages/AllQuestionsFromOneUser";

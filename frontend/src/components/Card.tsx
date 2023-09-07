@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Answer, Comment } from '../types';
 import moment from 'moment';
 import { ddbDeleteQuestion, ddbUpdateQuestion } from '../graphql';
 import { AccountContext } from '../Accounts';
+import { Auth } from 'aws-amplify';
 
 // Props interface for the card component
 interface CardProps {
@@ -19,6 +20,21 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = (question: CardProps) => {
     const { loggedInUser } = useContext(AccountContext);
+    const [user, setUser] = useState<{ username: string } | null>(null); // State to hold user data
+
+    useEffect(() => {
+        // Fetch the currently authenticated user
+        async function fetchUser() {
+            try {
+                const currentUser = await Auth.currentAuthenticatedUser();
+                setUser(currentUser); // Set the user data in the state
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+
+        fetchUser();
+    }, []);
 
     const isUpdated = () => {
         if (question.createdAt !== question.updatedAt) {
@@ -40,7 +56,12 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
         return null;
     }
     const formattedQuesId = extractValue(question.quesId);
-    const formattedAuthor = extractValue(question.author);
+    const formattedAuthor = user ? user.username : null;
+    console.log(`formattedAuthor ==== ${formattedAuthor}`);
+
+    const isAuthor = formattedAuthor === extractValue(question.author);
+    console.log(`isAuthor ==== ${isAuthor}`);
+    console.log(`loggedInUser ==== ${JSON.stringify(loggedInUser)}`);
 
     return (
         <div className="flex flex-col border-y-2 p-4 w-full">
@@ -49,13 +70,12 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
                     className="text-xl text-blue-500 font-bold mb-2 items-center justify-center">{question.title}</a>
                 {isUpdated() && <p className='text-gray-600 text-xs mt-2 ml-3'>Edited</p>}
                 {/* TODO: If the user is the creator of the post, be able to edit and delete the post */}
-                {loggedInUser &&
+                {isAuthor && (
                     <>
                         <a href={`/edit/question?quesId=${formattedQuesId}&author=${formattedAuthor}`} ><button onClick={() => ddbUpdateQuestion(question)} className='border-green-400 border-2 absolute right-0 rounded p-1 px-2 mr-12 -mt-2'>✏️</button></a>
                         <button onClick={() => ddbDeleteQuestion(question.quesId, question.author)} className='border-red-400 border-2 absolute right-0 rounded p-1 px-2 mr-2 -mt-2'>❌</button>
                     </>
-                }
-
+                )}
             </div>
             {/* Question's Comment Block */}
             {/* <div>
