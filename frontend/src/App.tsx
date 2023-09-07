@@ -8,10 +8,9 @@ import { Header } from "./components/Header";
 import { Sidenav } from "./components/Sidenav";
 import './input.css';
 
-import { AllCompanies } from "./pages/AllCompanies";
 import { AllQuestions } from "./pages/AllQuestions";
 import { AllTags } from "./pages/AllTags";
-import { AllUsers } from "./pages/AllUsers";
+import { AllAuthors } from "./pages/AllUsers";
 import { LandingPage } from "./pages/LandingPage";
 
 import { awsconfig } from "./aws-exports";
@@ -20,7 +19,7 @@ import { CreateQuestion } from "./pages/CreateQuestion";
 import { ddbCreateAnswer, ddbUpdateQuestion } from "./graphql";
 import { EditQuestion } from "./pages/EditPost";
 import ReadonlyPage from "./pages/ReadOnlyPage";
-import { AllQuestionsFromOneUser } from "./pages/AllQuestionsFromOneUser";
+import { AllQuestionsFromOneAuthor } from "./pages/AllQuestionsFromOneAuthor";
 // import RequireAuth from "./RequireAuth";
 Amplify.configure(awsconfig);
 
@@ -43,9 +42,8 @@ function App() {
               {/* </RequireAuth> */}
               {/* <Route path="/questions/:author/:quesId" element={<SingleQuestion />} /> */}
               <Route path="/tags" element={<AllTags />} />
-              <Route path="/users" element={<AllUsers />} />
-              <Route path="/users/:author" element={<AllQuestionsFromOneUser />} />
-              <Route path="/companies" element={<AllCompanies />} />
+              <Route path="/authors" element={<AllAuthors />} />
+              <Route path="/author" element={<AllQuestionsFromOneAuthor />} />
               <Route path="/" element={<LandingPage />} />
               {/* <Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>

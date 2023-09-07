@@ -1,6 +1,6 @@
 export {}
 
-export const AllUsers = () => {
+export const AllAuthors = () => {
   return (
     <div>AllUsers</div>
   )

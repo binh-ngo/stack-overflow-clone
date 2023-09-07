@@ -37,14 +37,6 @@ export const Sidenav = () => {
             <span>Tags</span>
           </a>
         </li>
-        <li className="relative">
-          <a
-            href="/companies"
-            className={`font-bold text-gray-600 hover:text-orange-500 flex h-12 items-center px-6 py-4 transition duration-300 ease-linear hover:outline-none focus:outline-none`}
-          >
-            <span>Companies</span>
-          </a>
-        </li>
       </ul>
     </nav>
   );

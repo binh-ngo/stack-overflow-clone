@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Answer, Comment } from '../types';
 import moment from 'moment';
 import { ddbDeleteQuestion, ddbUpdateQuestion } from '../graphql';
-import { AccountContext } from '../Accounts';
 import { Auth } from 'aws-amplify';
 
 // Props interface for the card component
@@ -19,7 +18,6 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = (question: CardProps) => {
-    const { loggedInUser } = useContext(AccountContext);
     const [user, setUser] = useState<{ username: string } | null>(null); // State to hold user data
 
     useEffect(() => {
@@ -57,14 +55,14 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
     }
     const formattedQuesId = extractValue(question.quesId);
     const formattedAuthor = user ? user.username : null;
-    console.log(`formattedAuthor ==== ${formattedAuthor}`);
+    // console.log(`formattedAuthor ==== ${formattedAuthor}`);
 
     const isAuthor = formattedAuthor === extractValue(question.author);
-    console.log(`isAuthor ==== ${isAuthor}`);
-    console.log(`loggedInUser ==== ${JSON.stringify(loggedInUser)}`);
+    // console.log(`isAuthor ==== ${isAuthor}`);
+    // console.log(`loggedInUser ==== ${JSON.stringify(loggedInUser)}`);
 
     return (
-        <div className="flex flex-col border-y-2 p-4 w-full">
+        <div className="flex flex-col border-b-2 p-4 w-full">
             <div className='flex flex-row'>
                 <a href={`/question?quesId=${formattedQuesId}&author=${formattedAuthor}`}
                     className="text-xl text-blue-500 font-bold mb-2 items-center justify-center">{question.title}</a>
@@ -99,7 +97,7 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
                 ))}
             </div> */}
             <div className=''>
-                <p className="text-gray-600">Written by <a href={`/users/${question.author}`} className="text-blue-500 font-bold">{`${question.author} `}</a>{` ${getTimePassed(question.createdAt)} ago`}</p>
+                <p className="text-gray-600">Written by <a href={`/author?author=${extractValue(question.author)}`} className="text-blue-500 font-bold">{`${extractValue(question.author)} `}</a><span className='text-xs text-gray-400'>{` ${getTimePassed(question.createdAt)} ago`}</span></p>
                 <div className='flex flex-row py-2'>
                     {/* {question.tags.map((tag, index) => (
                         <a href={`/tags/${tag}`} className="bg-sky-200 rounded-md px-1 mx-1" key={index}>{tag}</a>

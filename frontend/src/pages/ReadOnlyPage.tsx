@@ -64,6 +64,8 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
     setChildren(children);
   };
 
+  const formattedAuthor = question ? (question.author ? question.author.substring(7).trim().replace(/\s+/g, "") : "") : "";
+
   return (
     <>
       {/* {loggedInUser && (
@@ -80,7 +82,9 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
             <div className='flex flex-row w-full justify-around'>
               <h2 className='text-4xl text-blue-500 font-bold mb-2 w-full'>{question.title}</h2>
               {/* <LikeDislikeButtons /> */}
+              <div className="absolute right-8">
               <AskQuestionButton />
+              </div>
             </div>
             <ul className='flex flex-row w-full'>
               <li className='pr-2 text-sm'><span className='text-gray-500'>Asked </span>{`${getTimePassed(question!.createdAt)} ago`}</li>
@@ -99,7 +103,7 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
             </div>
             <div className='flex flex-col bg-sky-100 rounded-md w-fit py-1 px-4'>
               <p className='text-xs text-gray-500'>{`asked ${getTimePassed(question.createdAt)} ago`}</p>
-              <a className='text-blue-600 w-fit' href={`/users/${question.author}`}>{question.author}</a>
+              <a className='text-blue-600 w-fit' href={`/author?author=${formattedAuthor}`}>{formattedAuthor}</a>
             </div>
           </div>
         )}

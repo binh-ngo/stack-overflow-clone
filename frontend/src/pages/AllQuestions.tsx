@@ -23,8 +23,11 @@ const renderQuestions = () => {
     (a, b) => moment(b.createdAt).valueOf() - moment(a.createdAt).valueOf()
   );
   return (
-    <div className='flex flex-col items-center w-full'>
+    <>
+      <div className='absolute right-2'>
       <AskQuestionButton />
+      </div>
+    <div className='flex flex-col items-center w-full mt-16'>
       {sortedQuestions.map((question: ddbGetAllQueryResponse, index) => (
         <Card
           key={index}
@@ -37,9 +40,10 @@ const renderQuestions = () => {
           comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
-        />
-      ))}
+          />
+          ))}
     </div>
+          </>
   );
 }
 return (

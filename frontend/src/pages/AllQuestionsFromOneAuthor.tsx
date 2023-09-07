@@ -4,12 +4,14 @@ import { Card } from '../components/Card';
 import { ddbGetAllQueryResponse } from '../types';
 import { AskQuestionButton } from '../components/AskQuestionButton';
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-
-export const AllQuestionsFromOneUser = () => {
+export const AllQuestionsFromOneAuthor = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
-  const { author = '' } = useParams<{ author?: string }>(); // Provide default value
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const author = "AUTHOR#" + searchParams.get('author');
+console.log(author)
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -25,8 +27,11 @@ const renderQuestions = () => {
     (a, b) => moment(b.createdAt).valueOf() - moment(a.createdAt).valueOf()
   );
   return (
-    <div className='flex flex-col items-center w-full'>
+    <>
+      <div className='absolute right-4'>
       <AskQuestionButton />
+      </div>
+    <div className='flex flex-col items-center w-full mt-16'>
       {sortedQuestions.map((question: ddbGetAllQueryResponse, index) => (
         <Card
           key={index}
@@ -39,9 +44,10 @@ const renderQuestions = () => {
           comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
-        />
+          />
       ))}
     </div>
+          </>
   );
 }
 return (
