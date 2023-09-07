@@ -38,12 +38,13 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
           title: question.title,
           body: bodyString,
           author: question.author,
-          tags: question.tags
+          // tags: question.tags
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
+    return resp;
   };
   
 

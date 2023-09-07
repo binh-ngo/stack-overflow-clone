@@ -81,9 +81,9 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
             <div className=''>
                 <p className="text-gray-600">Written by <a href={`/users/${question.author}`} className="text-blue-500 font-bold">{`${question.author} `}</a>{` ${getTimePassed(question.createdAt)} ago`}</p>
                 <div className='flex flex-row py-2'>
-                    {question.tags.map((tag, index) => (
+                    {/* {question.tags.map((tag, index) => (
                         <a href={`/tags/${tag}`} className="bg-sky-200 rounded-md px-1 mx-1" key={index}>{tag}</a>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </div>

@@ -5,13 +5,16 @@ import Editor from "../components/Lexical/Editor.js";
 import { Auth } from "aws-amplify";
 import "../components/Lexical/styles.css"
 import { CreateQuestionProps } from "../types";
+import { useNavigate } from 'react-router-dom';
 
 export const CreateQuestion = (props: CreateQuestionProps) => {
   const [title, setTitle] = useState("");
-  const [tags, setTags] = useState("");
+  // const [tags, setTags] = useState("");
   const [children, setChildren]: any = useState(props.children);
   const [successfulSave, setSuccessfulSave] = useState(false);
   const [author, setAuthor] = useState(null);
+
+    let navigate = useNavigate();
 
   useEffect(() => {
     async function fetchUserData() {
@@ -35,12 +38,12 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
     }
   }, [props.title, props.children]);
 
-  function stringofTags(inputString: string): string[] {
-    const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
-    const tagsArray = cleanedString.split(/\s+/); // Split by spaces
+  // function stringofTags(inputString: string): string[] {
+  //   const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
+  //   const tagsArray = cleanedString.split(/\s+/); // Split by spaces
 
-    return tagsArray;
-  }
+  //   return tagsArray;
+  // }
  
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
@@ -54,15 +57,33 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,
         body: children, 
-        tags: tags.trim() ? stringofTags(tags) : [],
+        // tags: tags.trim() ? stringofTags(tags) : [],
       };
+
+      let createdQuestion = null; // To store the created question
       try {
-        const response = await ddbCreateQuestion(question); // Make the DynamoDB API call here
-        console.log(`Response from DynamoDB: ${JSON.stringify(response)}`);
+
+        const response = await ddbCreateQuestion(question);
+        if ('data' in response) {
+          // Handle the case when response is a GraphQL result
+          createdQuestion = response.data.createQuestion;
+          console.log(`Response from DynamoDB: ${JSON.stringify(createdQuestion)}`);
+        } else {
+          // Handle the case when response is an Observable object (if needed)
+          console.error('Response is not a GraphQL result:', response);
+        }
       } catch (error) {
         console.error('Error saving question to DynamoDB:', error);
       }
-    } else {
+      if (createdQuestion) {
+        const authorQueryParam = createdQuestion.author ? question.author.replace("AUTHOR#", "") : 'Unknown';
+        const quesIdQueryParam = createdQuestion.quesId.replace("QUESTION#", "");
+        navigate(`/question?quesId=${quesIdQueryParam}&author=${authorQueryParam}`);
+      } else {
+        console.log("onSave called but title or children are empty");
+      }
+    } 
+      else {
       console.log("onSave called but title or children are empty");
     }
   };
@@ -75,6 +96,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
   console.log("Rendering PostEditor");
 
   return (
+    <>
     <div className="flex flex-col justify-center w-screen 2xl:-mt-32">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row justify-center items-center w-full">
@@ -91,7 +113,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
           >
           </input>
         </div>
-        <div className="flex flex-row justify-center items-center w-full my-8">
+        {/* <div className="flex flex-row justify-center items-center w-full my-8">
           <label className="text-4xl text-orange-500 font-bold mb-2 border-b-2 border-orange-500 items-center justify-center" htmlFor="title">Tags:</label>
           <input
             className="border-b-2 border-orange-500 py-1"
@@ -99,19 +121,20 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             id="tags"
             value={tags}
             onChange={(event) => {
-            setTags(event.target.value);
+              setTags(event.target.value);
             }}
           ></input>
-        </div>
+        </div> */}
       </div>
       <Editor
         // readOnly={props.readOnly}
         onChange={handleChange}
         children={children}
-      />
+        />
       {successfulSave && <span>Successfully saved</span>}
       <button className="text-white bg-orange-500 h-20 p-2 text-lg rounded-md" onClick={handleSave}>Save</button>
 
     </div>
+        </>
   );
 };

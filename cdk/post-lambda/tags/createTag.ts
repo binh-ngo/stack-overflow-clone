@@ -28,19 +28,43 @@ const createTag = async (questionInput: QuestionInput) => {
         upvotedBy: null,
         downvotedBy: null
     };
-    const tagPutRequests = questionInput.tags.flatMap(tag => [
-        {
-            PutRequest: {
-                Item: {
-                    PK: `TAG#${tag}`,
-                    SK: tagId,
-                    type: 'tag',
-                    tagName: tag,
-                    count: 0
-                },
-                ConditionExpression: "attribute_not_exists("
-            },
-        },
+// Needed to separate this put request because in batchWrite operations,
+// if one fails, all fail. We had to further separate each request for each
+//  tag with individual put requests for the same reason
+    const conditionalParams = questionInput.tags!.map(tag => ({
+        RequestItems: {
+            "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": [
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `TAG#${tag}`,
+                            SK: tagId,
+                            type: 'tag',
+                            tagName: tag,
+                            count: 0
+                        },
+                        ConditionExpression: "attribute_not_exists(PK)"
+                    },
+                }
+            ]
+        }
+}));
+
+// Now, you can execute each put operation individually
+const promises = conditionalParams.map(async params => {
+    try {
+      await docClient.put(params).promise();
+      console.log(`Successfully added tag: ${params.RequestItems["StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR"][0].PutRequest.Item.tagName}`);
+    } catch (err) {
+      console.error(`Failed to add tag: ${params.RequestItems["StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR"][0].PutRequest.Item.tagName}`);
+      console.error(err);
+    }
+  });
+  
+  // Wait for all promises to resolve
+  await Promise.all(promises);
+
+    const tagPutRequests = questionInput.tags!.flatMap(tag => [
         {
             PutRequest: {
                 Item: {
