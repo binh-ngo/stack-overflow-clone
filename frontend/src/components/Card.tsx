@@ -51,7 +51,7 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
                 {/* TODO: If the user is the creator of the post, be able to edit and delete the post */}
                 {loggedInUser &&
                     <>
-                        <a href={`/edit/questions/${question.quesId}/${question.author}`} ><button onClick={() => ddbUpdateQuestion(question)} className='border-green-400 border-2 absolute right-0 rounded p-1 px-2 mr-12 -mt-2'>✏️</button></a>
+                        <a href={`/edit/question?quesId=${formattedQuesId}&author=${formattedAuthor}`} ><button onClick={() => ddbUpdateQuestion(question)} className='border-green-400 border-2 absolute right-0 rounded p-1 px-2 mr-12 -mt-2'>✏️</button></a>
                         <button onClick={() => ddbDeleteQuestion(question.quesId, question.author)} className='border-red-400 border-2 absolute right-0 rounded p-1 px-2 mr-2 -mt-2'>❌</button>
                     </>
                 }

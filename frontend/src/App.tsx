@@ -36,10 +36,10 @@ function App() {
             <Sidenav />
             <Routes>
               <Route path="/question" element={<ReadonlyPage onSave={ddbCreateAnswer} />} />
-              <Route path="/edit/questions/:quesId/:author" element={<EditQuestion onSave={ddbUpdateQuestion}/>} />
+              <Route path="/edit/question" element={<EditQuestion onSave={ddbUpdateQuestion}/>} />
               <Route path="/questions" element={<AllQuestions />} />
               {/* <RequireAuth> */}
-                <Route path="/questions/create" element={<CreateQuestion onSave={ddbCreateQuestion}/>} />
+                <Route path="/questions/create" element={<CreateQuestion />} />
               {/* </RequireAuth> */}
               {/* <Route path="/questions/:author/:quesId" element={<SingleQuestion />} /> */}
               <Route path="/tags" element={<AllTags />} />

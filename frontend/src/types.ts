@@ -82,7 +82,7 @@ type User = {
 };
 
 type CreateQuestionProps = {
-  onSave: (question: SaveQuestionProps) => void;
+  onSave?: (question: SaveQuestionProps) => void;
   title?: string;
   children?: any;
   quesId?: string;

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ddbCreateQuestion, ddbGetQuestionById, SaveQuestionProps } from "../graphql";
 import Editor from "../components/Lexical/Editor.js";
 import "../components/Lexical/styles.css"
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ddbGetAllQueryResponse } from "../types";
 
 type CreateQuestionProps = {
@@ -15,15 +15,21 @@ type CreateQuestionProps = {
 };
 
 export const EditQuestion = (props: CreateQuestionProps) => {
-    const { quesId, author } = useParams();
-    const [title, setTitle] = useState("");
-    const [tags, setTags] = useState("");
-    const [children, setChildren]: any = useState(props.children);
-    const [successfulSave, setSuccessfulSave] = useState(false);
-
+  const [title, setTitle] = useState("");
+  // const [tags, setTags] = useState("");
+  const [children, setChildren]: any = useState(props.children);
+  const [successfulSave, setSuccessfulSave] = useState(false);
   const [question, setQuestion] = useState<ddbGetAllQueryResponse | null>(null);
   const [value, setValue] = useState(null);
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const author = "AUTHOR#" + searchParams.get('author');
+  const quesId = "QUESTION#" + searchParams.get('quesId');
+  
+  // console.log(`AUTHOR ---- ${author}`)
+  // console.log(`QUESID ---- ${quesId}`)
   useEffect(() => {
       const fetchQuestion = async () => {
           const response = await ddbGetQuestionById(author ?? '', quesId ?? '');
@@ -48,12 +54,12 @@ export const EditQuestion = (props: CreateQuestionProps) => {
     }
   }, [props.title, props.children, props.quesId]);
 
-  function stringofTags(inputString: string): string[] {
-    const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
-    const tagsArray = cleanedString.split(/\s+/); // Split by spaces
+  // function stringofTags(inputString: string): string[] {
+  //   const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
+  //   const tagsArray = cleanedString.split(/\s+/); // Split by spaces
 
-    return tagsArray;
-  }
+  //   return tagsArray;
+  // }
 
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
@@ -68,7 +74,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,
         body: children,
-        tags: stringofTags(tags),
+        // tags: stringofTags(tags),
       };
       try {
         const response = await ddbCreateQuestion(question); // Make the DynamoDB API call here
@@ -105,7 +111,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
           ></input>
 
         </div>
-        <div className="flex flex-row justify-center items-center w-full my-8">
+        {/* <div className="flex flex-row justify-center items-center w-full my-8">
           <label className="text-4xl text-orange-500 font-bold mb-2 border-b-2 border-orange-500 items-center justify-center" htmlFor="title">Tags:</label>
           <input
             className="border-b-2 border-orange-500 py-1"
@@ -116,7 +122,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
               setTags(event.target.value);
             }}
           ></input>
-        </div>
+        </div> */}
       </div>
       <Editor
         // readOnly={props.readOnly}
