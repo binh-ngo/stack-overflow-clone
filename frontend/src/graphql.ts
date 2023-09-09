@@ -38,7 +38,7 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
           title: question.title,
           body: bodyString,
           author: question.author,
-          // tags: question.tags
+          tags: question.tags
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",

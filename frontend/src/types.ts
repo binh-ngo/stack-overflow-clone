@@ -37,9 +37,7 @@ type Question = {
   author: string;
   title: string;
   body: string;
-  tags: string;
-  comments: [Comment],
-  answers: [Answer],
+  tags: string[];
   points: number;
   upvotedBy: number;
   downvotedBy: number;
@@ -55,6 +53,7 @@ export type QuestionResponse = {
   body: string;
   createdAt: string;
   updatedAt: string;
+  tags: string[];
   points: string;
   quesId: string;
   title: string;
@@ -86,6 +85,7 @@ type CreateQuestionProps = {
   title?: string;
   children?: any;
   quesId?: string;
+  tags?: string[];
 };
 
 export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, CreateQuestionProps };

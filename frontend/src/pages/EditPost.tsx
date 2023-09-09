@@ -16,7 +16,7 @@ type CreateQuestionProps = {
 
 export const EditQuestion = (props: CreateQuestionProps) => {
   const [title, setTitle] = useState("");
-  // const [tags, setTags] = useState("");
+  const [tags, setTags] = useState("");
   const [children, setChildren]: any = useState(props.children);
   const [successfulSave, setSuccessfulSave] = useState(false);
   const [question, setQuestion] = useState<ddbGetAllQueryResponse | null>(null);
@@ -54,12 +54,12 @@ export const EditQuestion = (props: CreateQuestionProps) => {
     }
   }, [props.title, props.children, props.quesId]);
 
-  // function stringofTags(inputString: string): string[] {
-  //   const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
-  //   const tagsArray = cleanedString.split(/\s+/); // Split by spaces
+  function stringofTags(inputString: string): string[] {
+    const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
+    const tagsArray = cleanedString.split(/\s+/); // Split by spaces
 
-  //   return tagsArray;
-  // }
+    return tagsArray;
+  }
 
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
@@ -74,7 +74,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,
         body: children,
-        // tags: stringofTags(tags),
+        tags: stringofTags(tags),
       };
       try {
         const response = await ddbCreateQuestion(question); // Make the DynamoDB API call here
@@ -111,7 +111,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
           ></input>
 
         </div>
-        {/* <div className="flex flex-row justify-center items-center w-full my-8">
+        <div className="flex flex-row justify-center items-center w-full my-8">
           <label className="text-4xl text-orange-500 font-bold mb-2 border-b-2 border-orange-500 items-center justify-center" htmlFor="title">Tags:</label>
           <input
             className="border-b-2 border-orange-500 py-1"
@@ -122,7 +122,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
               setTags(event.target.value);
             }}
           ></input>
-        </div> */}
+        </div>
       </div>
       <Editor
         // readOnly={props.readOnly}

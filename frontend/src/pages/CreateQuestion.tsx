@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const CreateQuestion = (props: CreateQuestionProps) => {
   const [title, setTitle] = useState("");
-  // const [tags, setTags] = useState("");
+  const [tags, setTags] = useState("");
   const [children, setChildren]: any = useState(props.children);
   const [successfulSave, setSuccessfulSave] = useState(false);
   const [author, setAuthor] = useState(null);
@@ -38,12 +38,12 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
     }
   }, [props.title, props.children]);
 
-  // function stringofTags(inputString: string): string[] {
-  //   const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
-  //   const tagsArray = cleanedString.split(/\s+/); // Split by spaces
+  function stringofTags(inputString: string): string[] {
+    const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
+    const tagsArray = cleanedString.split(/\s+/); // Split by spaces
 
-  //   return tagsArray;
-  // }
+    return tagsArray;
+  }
 
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
@@ -54,8 +54,9 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
         author: author ? author : 'Unknown', // Use the username as author or a default value
         title,
         body: children,
-        // tags: tags.trim() ? stringofTags(tags) : [],
+        tags: tags.trim() ? stringofTags(tags) : [],
       };
+      
       let createdQuestion = null;
       const response = await ddbCreateQuestion(question);
       if ('data' in response) {
@@ -103,7 +104,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             >
             </input>
           </div>
-          {/* <div className="flex flex-row justify-center items-center w-full my-8">
+          <div className="flex flex-row justify-center items-center w-full my-8">
           <label className="text-4xl text-orange-500 font-bold mb-2 border-b-2 border-orange-500 items-center justify-center" htmlFor="title">Tags:</label>
           <input
             className="border-b-2 border-orange-500 py-1"
@@ -112,9 +113,10 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
             value={tags}
             onChange={(event) => {
               setTags(event.target.value);
+              console.log(tags)
             }}
           ></input>
-        </div> */}
+        </div>
         </div>
         <Editor
           // readOnly={props.readOnly}

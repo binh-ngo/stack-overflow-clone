@@ -3,6 +3,9 @@ schema {
     mutation: Mutation
 }
   type Query {
+    getAllAuthors: [Author]
+    getAuthorById(author: String!): Author!
+
     getAllQuestions(author: String!): [Question] 
     getAllQuestionsFromAllUsers: [Question]
     getQuestionById(author: String!, quesId: String!): Question
@@ -24,6 +27,8 @@ schema {
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
 # everything else is authorized by the API Key
   type Mutation {
+    createAuthor(authorInput: AuthorInput): Author @aws_cognito_user_pools
+    deleteAuthor(author: String!, id: String!): String @aws_cognito_user_pools
 
     createQuestion(question: QuestionInput): Question @aws_cognito_user_pools
     deleteQuestion(author: String!, quesId: String!): String @aws_cognito_user_pools
@@ -108,21 +113,33 @@ schema {
     points: Int!
     createdAt: AWSDateTime!
   }
-
-  type User {
+  type Author {
     id: ID!
-    username: String!
-    imageUrl: AWSURL
-    role: RoleType!
-    questions: [QuestionRep]!
-    answers: [AnswerRep]!
-    createdAt: AWSDateTime!
-    reputation: Int!
-    recentQuestions: [RecentActivity]!
-    recentAnswers: [RecentActivity]!
+    author: String!
     totalQuestions: Int!
     totalAnswers: Int!
+    createdAt: String!
   }
+
+  input AuthorInput {
+    id: String!
+    author: String!
+  }
+
+  # type User {
+  #   id: ID!
+  #   username: String!
+  #   imageUrl: AWSURL
+  #   role: RoleType!
+  #   questions: [QuestionRep]!
+  #   answers: [AnswerRep]!
+  #   createdAt: AWSDateTime!
+  #   reputation: Int!
+  #   recentQuestions: [RecentActivity]!
+  #   recentAnswers: [RecentActivity]!
+  #   totalQuestions: Int!
+  #   totalAnswers: Int!
+  # }
 
   # type UserList {
   #   id: ID!

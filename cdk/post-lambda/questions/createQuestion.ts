@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { ulid } from "ulid";
+import createTag from "../tags/createTag";
 import { Question, QuestionInput } from "../types";
 require("dotenv").config({ path: ".env" });
 
@@ -17,6 +18,7 @@ const createQuestion = async (questionInput: QuestionInput) => {
         author: `AUTHOR#${formattedAuthor}`,
         title: questionInput.title,
         body: questionInput.body,
+        tags: questionInput.tags,
         points: 0,
         views: 0,
         acceptedAnswer: null,
@@ -57,6 +59,9 @@ const createQuestion = async (questionInput: QuestionInput) => {
     try {
         const data = await docClient.batchWrite(params).promise();
         console.log("Success", data);
+        if(data) {
+            createTag(questionInput);
+        }
         return question;
     } catch (err) {
         console.log("Error", err);

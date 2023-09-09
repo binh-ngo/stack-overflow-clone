@@ -96,10 +96,10 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
               {value && <ReadOnlyPost children={value} />}
             </div>
             <div className='flex flex-row'>
-              {/* {question.tags.map((tag, index) => (
+              {question.tags.map((tag, index) => (
                 <a href={`/tags/${tag}`} className=" bg-sky-100 rounded-md my-6 text-blue-600 px-2 mx-1" key={index}>{tag}</a>
               )
-              )} */}
+              )}
             </div>
             <div className='flex flex-col bg-sky-100 rounded-md w-fit py-1 px-4'>
               <p className='text-xs text-gray-500'>{`asked ${getTimePassed(question.createdAt)} ago`}</p>

@@ -43,21 +43,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       new CfnOutput(this, "StackOverflowPostsTableName", {
         value: postsTable.tableName,
       });
-
-      const usersTable = new Table(this, "StackOverflowUsersTable", {
-        billingMode: BillingMode.PAY_PER_REQUEST,
-        partitionKey: {
-          name: "PK",
-          type: AttributeType.STRING,
-        },
-        sortKey: {
-          name: "SK",
-          type: AttributeType.STRING,
-        },
-      });
-      new CfnOutput(this, "StackOverflowUsersTableName", {
-        value: usersTable.tableName,
-      });
   
       const postLambda = new LambdaFunction(this, "StackOverflowPostLambda", {
         runtime: Runtime.NODEJS_14_X,
@@ -69,18 +54,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         },
       });
       postsTable.grantFullAccess(postLambda);
-      // usersTable.grantFullAccess(postLambda);
-      
-      const usersLambda = new LambdaFunction(this, "StackOverflowUserLambda", {
-        runtime: Runtime.NODEJS_14_X,
-        handler: "main.handler",
-        code: Code.fromAsset("user-lambda"),
-        memorySize: 512,
-        environment: {
-          USER_TABLE: usersTable.tableName,
-        },
-      });
-      usersTable.grantFullAccess(usersLambda);
   
       const api = new GraphqlApi(this, "PostApi", {
         name: "post-appsync-api",
@@ -211,22 +184,22 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         fieldName: "acceptAnswer",
       });
 
-      // User Resolvers
+      // Author Resolvers
       postDataSource.createResolver({
         typeName: "Query",
-        fieldName: "getUser",
+        fieldName: "getAuthorById",
       });
       postDataSource.createResolver({
         typeName: "Query",
-        fieldName: "getAllUsers",
+        fieldName: "getAllAuthors",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "register",
+        fieldName: "createAuthor",
       });
       postDataSource.createResolver({
         typeName: "Mutation",
-        fieldName: "login",
+        fieldName: "deleteAuthor",
       });
 
       // Comment Resolvers

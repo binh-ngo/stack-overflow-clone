@@ -10,7 +10,7 @@ import './input.css';
 
 import { AllQuestions } from "./pages/AllQuestions";
 import { AllTags } from "./pages/AllTags";
-import { AllAuthors } from "./pages/AllUsers";
+import { AllAuthors } from "./pages/AllAuthors";
 import { LandingPage } from "./pages/LandingPage";
 
 import { awsconfig } from "./aws-exports";

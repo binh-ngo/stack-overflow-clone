@@ -16,7 +16,7 @@ export type Question = {
     body: string;
     points: number;
     views: number;
-    tags?: string[] | null;
+    tags: string[] | null;
     acceptedAnswer: string | null;
     upvotedBy: string[] | null;
     downvotedBy: string[] | null;
@@ -28,6 +28,7 @@ export type QuestionResponse = {
   body: string;
   createdAt: string;
   points: string;
+  tags: string[];
   quesId: string;
   title: string;
   views: number;
@@ -37,7 +38,24 @@ export type QuestionInput = {
     title: string;
     body: string;
     author: string;
-    tags?: string[];
+    tags: string[];
+}
+
+export type AuthorInput = {
+    id: string;
+    author: string;
+}
+
+export type Author = {
+  id: string;
+  author: string;
+  totalQuestions: number;
+  totalAnswers: number;
+  createdAt: string;
+}
+
+export type AuthorUpdateableFields = {
+  author: string;
 }
 
 export type QuestionUpdateableFields = {

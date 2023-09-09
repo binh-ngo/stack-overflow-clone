@@ -10,10 +10,9 @@ const createTag = async (questionInput: QuestionInput) => {
     );
 
     const quesId = ulid();
-    const tagId = ulid();
-
+    
     const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
-
+    
     const question: Question = {
         quesId: `QUESTION#${quesId}`,
         author: `AUTHOR#${formattedAuthor}`,
@@ -28,43 +27,54 @@ const createTag = async (questionInput: QuestionInput) => {
         upvotedBy: null,
         downvotedBy: null
     };
-// Needed to separate this put request because in batchWrite operations,
-// if one fails, all fail. We had to further separate each request for each
+    // Needed to separate this put request because in batchWrite operations,
+    // if one fails, all fail. We had to further separate each request for each
 //  tag with individual put requests for the same reason
-    const conditionalParams = questionInput.tags!.map(tag => ({
-        RequestItems: {
-            "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": [
-                {
-                    PutRequest: {
-                        Item: {
-                            PK: `TAG#${tag}`,
-                            SK: tagId,
-                            type: 'tag',
-                            tagName: tag,
-                            count: 0
-                        },
-                        ConditionExpression: "attribute_not_exists(PK)"
-                    },
-                }
-            ]
-        }
-}));
 
-// Now, you can execute each put operation individually
-const promises = conditionalParams.map(async params => {
+const promises = questionInput.tags.map(async (tag) => {
+
+    const tagId = ulid();
+    
+    const putRequestParams = {
+      TableName: process.env.POSTS_TABLE,
+      Item: {
+        PK: `TAG#${tag}`,
+        SK: `TAG#${tagId}`,
+        type: "tag",
+        tagName: tag,
+        count: 0,
+      },
+    };
+
     try {
-      await docClient.put(params).promise();
-      console.log(`Successfully added tag: ${params.RequestItems["StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR"][0].PutRequest.Item.tagName}`);
+      const tagExists = await docClient.query({
+          TableName: process.env.POSTS_TABLE,
+          KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
+          ExpressionAttributeNames: {
+            "#PK": "PK",
+            "#SK": "SK",
+          },
+          ExpressionAttributeValues: {
+            ":post_partition": `TAG#${tag}`,
+            ":sk_prefix": "TAG#",
+          },
+        })
+        .promise();
+
+      if (tagExists.Count > 0) {
+        console.log(`Tag already exists: ${putRequestParams.Item.tagName}`);
+      } else {
+        const response = await docClient.put(putRequestParams).promise();
+        console.log(`Successfully added tag: ${putRequestParams.Item.tagName}`);
+        console.log(response);
+      }
     } catch (err) {
-      console.error(`Failed to add tag: ${params.RequestItems["StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR"][0].PutRequest.Item.tagName}`);
+      console.error(`Error processing tag: ${tag}`);
       console.error(err);
     }
   });
   
-  // Wait for all promises to resolve
-  await Promise.all(promises);
-
-    const tagPutRequests = questionInput.tags!.flatMap(tag => [
+  const tagPutRequests = questionInput.tags.flatMap(tag => [
         {
             PutRequest: {
                 Item: {
@@ -87,24 +97,26 @@ const promises = conditionalParams.map(async params => {
             },
         },
     ]);
-
-    const params = {
+    
+    const batchWriteParams = {
         RequestItems: {
             "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": tagPutRequests,
         },
         ReturnConsumedCapacity: "TOTAL",
     };
-
+    
     console.log("tagPutRequests:", JSON.stringify(tagPutRequests, null, 2));
-    console.log("params:", JSON.stringify(params, null, 2));
-
+    console.log("params:", JSON.stringify(batchWriteParams, null, 2));
+    
     try {
-        const data = await docClient.batchWrite(params).promise();
+        const data = await docClient.batchWrite(batchWriteParams).promise();
         console.log("Success", data);
     } catch (err) {
         console.log("Error", err);
     }
-
+    
+  // Wait for all promises to resolve
+  await Promise.all(promises);
 };
 
 export default createTag;

@@ -84,6 +84,7 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
         title: event.arguments.question!.title,
         body: event.arguments.question!.body,
         author: event.arguments.question!.author,
+        tags: event.arguments.question!.tags
       };
       return createQuestion(questionInput);
     case "updateQuestion":
