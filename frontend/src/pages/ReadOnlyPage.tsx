@@ -21,8 +21,8 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
-  const author = "AUTHOR#" + searchParams.get('author');
   const quesId = "QUESTION#" + searchParams.get('quesId');
+  const author = "AUTHOR#" + searchParams.get('author');
   // const { loggedInUser } = useContext(AccountContext);
 
   // let navigate = useNavigate();

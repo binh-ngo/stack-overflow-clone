@@ -54,7 +54,7 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
         return null;
     }
     const formattedQuesId = extractValue(question.quesId);
-    const formattedAuthor = user ? user.username : null;
+    const formattedAuthor = extractValue(question.author);
     // console.log(`formattedAuthor ==== ${formattedAuthor}`);
 
     const isAuthor = formattedAuthor === extractValue(question.author);
