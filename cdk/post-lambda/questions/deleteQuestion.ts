@@ -75,51 +75,6 @@ const deleteQuestion = async (author: string, quesId: string) => {
     console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
     return null;
   }  
-  // const params = {
-  //   // TableName: process.env.POSTS_TABLE,
-  //   // Key: {
-  //   //   PK: author,
-  //   //   SK: quesId,
-  //   // },
-  //   // ReturnConsumedCapacity: "TOTAL",
-  //   RequestItems: {
-  //     "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": [
-  //       {
-  //         DeleteRequest: {
-  //           Key: {
-  //               PK: author,
-  //               SK: quesId,
-  //           }
-  //         }
-  //       },
-  //       {
-  //         DeleteRequest: {
-  //           Key: {
-  //               PK: quesId,
-  //               SK: quesId,
-  //           }
-  //         }
-  //       },
-  //       {
-  //         DeleteRequest: {
-  //           Key: {
-  //               PK: quesId,
-  //               SK: quesId,
-  //           }
-  //         }
-  //       },
-  //     ]
-  //   }
-  // };
-
-  // try {
-  //   await docClient.delete(params).promise();
-  //   return quesId;
-  // } catch (err) {
-  //   console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
-
-  //   return null;
-  // }
 };
 
 export default deleteQuestion;

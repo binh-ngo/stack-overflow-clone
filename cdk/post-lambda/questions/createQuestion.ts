@@ -60,7 +60,7 @@ const createQuestion = async (questionInput: QuestionInput) => {
         const data = await docClient.batchWrite(params).promise();
         console.log("Success", data);
         if(data) {
-            createTag(questionInput);
+            createTag(question);
         }
         return question;
     } catch (err) {

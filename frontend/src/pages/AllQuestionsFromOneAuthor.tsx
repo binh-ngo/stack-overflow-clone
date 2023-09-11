@@ -26,9 +26,15 @@ const renderQuestions = () => {
   const sortedQuestions = questions.sort(
     (a, b) => moment(b.createdAt).valueOf() - moment(a.createdAt).valueOf()
   );
+
+  const formattedAuthor =(author ? author.substring(7).trim().replace(/\s+/g, "") : "");
+
   return (
     <>
-      <div className='absolute right-4'>
+      <div className="mt-2 border-b-2 absolute left-36 text-3xl text-blue-500 font-bold mb-2 w-full">
+        <h1>{formattedAuthor}'s questions</h1>
+      </div>
+      <div className='absolute right-4 -mt-2'>
       <AskQuestionButton />
       </div>
     <div className='flex flex-col items-center w-full mt-16'>
@@ -40,8 +46,6 @@ const renderQuestions = () => {
           author={question.author}
           createdAt={question.createdAt}
           quesId={question.quesId}
-          answers={question.answers}
-          comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
           />

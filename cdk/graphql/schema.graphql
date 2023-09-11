@@ -64,12 +64,6 @@ schema {
     ): Comment @aws_cognito_user_pools  
 
     createTag(question: QuestionInput): Tag @aws_cognito_user_pools
-    deleteTag(tagName: String!, tagId: String!): String @aws_cognito_user_pools
-    updateTag(
-      tagName: String!
-      tagId: String!
-      tagInput: TagInput!
-    ): Tag @aws_cognito_user_pools
   }
   
 

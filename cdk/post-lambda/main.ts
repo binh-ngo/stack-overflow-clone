@@ -162,7 +162,6 @@ function handleTagEvent(event: TagAppSyncEvent) {
     case "getAllTags":
       return getAllTags();
     case "getAllQuestionsByTag":
-      console.log(`TAGNAME -------- ${event.arguments.tagName!}`)
       return getAllQuestionsByTag(event.arguments.tagName!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);

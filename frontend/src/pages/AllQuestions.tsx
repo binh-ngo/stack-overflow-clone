@@ -36,8 +36,6 @@ const renderQuestions = () => {
           author={question.author}
           createdAt={question.createdAt}
           quesId={question.quesId}
-          answers={question.answers}
-          comments={question.comments}
           updatedAt={question.updatedAt}
           tags={question.tags}
           />

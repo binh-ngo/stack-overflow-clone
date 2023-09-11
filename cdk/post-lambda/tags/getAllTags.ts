@@ -9,15 +9,13 @@ const getAllTags = async () => {
 
   const params: ddbQueryPostsParams = {
     TableName: process.env.POSTS_TABLE || "",
+    KeyConditionExpression: "#PK = :post_partition",
     ExpressionAttributeNames: {
       "#PK": "PK",
-      "#SK": "SK"
     },
     ExpressionAttributeValues: {
       ":post_partition": "TAGS",
-      ":sk_prefix": "TAG#",
     },
-    KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
     ReturnConsumedCapacity: "TOTAL",
     ScanIndexForward: false, // Set this to true for ascending order
   };

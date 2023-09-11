@@ -97,7 +97,7 @@ const ReadonlyPage = (props:CreateQuestionProps) => {
             </div>
             <div className='flex flex-row'>
               {question.tags.map((tag, index) => (
-                <a href={`/tags/${tag}`} className=" bg-sky-100 rounded-md my-6 text-blue-600 px-2 mx-1" key={index}>{tag}</a>
+                <a href={`/tag?tag=${tag}`} className=" bg-sky-100 rounded-md my-6 text-blue-600 px-2 mx-1" key={index}>{tag}</a>
               )
               )}
             </div>

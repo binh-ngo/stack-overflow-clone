@@ -12,8 +12,6 @@ interface CardProps {
     createdAt: string;
     updatedAt: string;
     quesId: string;
-    answers: [Answer];
-    comments: [Comment];
     tags: string[];
 }
 

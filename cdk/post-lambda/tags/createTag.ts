@@ -1,37 +1,19 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { ulid } from "ulid";
-import { Question, QuestionInput } from "../types";
+import { Question } from "../types";
 require("dotenv").config({ path: ".env" });
 
-const createTag = async (questionInput: QuestionInput) => {
+const createTag = async (questionInput: Question) => {
     console.log(
         `createTag invocation event: ${JSON.stringify(questionInput, null, 2)}`
     );
-
-    const quesId = ulid();
     
-    const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
-    
-    const question: Question = {
-        quesId: `QUESTION#${quesId}`,
-        author: `AUTHOR#${formattedAuthor}`,
-        title: questionInput.title,
-        body: questionInput.body,
-        tags: questionInput.tags,
-        points: 0,
-        views: 0,
-        acceptedAnswer: null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        upvotedBy: null,
-        downvotedBy: null
-    };
     // Needed to separate this put request because in batchWrite operations,
     // if one fails, all fail. We had to further separate each request for each
 //  tag with individual put requests for the same reason
 
-const promises = questionInput.tags.map(async (tag) => {
+const promises = questionInput.tags!.map(async (tag) => {
 
     const tagId = ulid();
     
@@ -75,11 +57,11 @@ const promises = questionInput.tags.map(async (tag) => {
     }
   });
   
-  const tagPutRequests = questionInput.tags.flatMap(tag => [
+  const tagPutRequests = questionInput.tags!.flatMap(tag => [
         {
             PutRequest: {
                 Item: {
-                    PK: `QUESTION#${quesId}`,
+                    PK: questionInput.quesId,
                     SK: `TAG#${tag}`,
                     type: 'tag',
                     tagName: tag,
@@ -91,9 +73,20 @@ const promises = questionInput.tags.map(async (tag) => {
             PutRequest: {
                 Item: {
                     PK: `TAG#${tag}`,
-                    SK: `QUESTION#${quesId}`,
+                    SK: questionInput.quesId,
                     type: 'question',
-                    ...question
+                    quesId: questionInput.quesId,
+                    author: questionInput.author,
+                    title: questionInput.title,
+                    body: questionInput.body,
+                    tags: questionInput.tags,
+                    points: questionInput.points,
+                    views: questionInput.views,
+                    acceptedAnswer: questionInput.acceptedAnswer,
+                    createdAt: questionInput.createdAt,
+                    updatedAt: questionInput.updatedAt,
+                    upvotedBy: questionInput.upvotedBy,
+                    downvotedBy: questionInput.downvotedBy,
                 },
             },
         },
