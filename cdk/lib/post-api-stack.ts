@@ -45,7 +45,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
   
       const postLambda = new LambdaFunction(this, "StackOverflowPostLambda", {
-        runtime: Runtime.NODEJS_14_X,
+        runtime: Runtime.NODEJS_18_X,
         handler: "main.handler",
         code: Code.fromAsset("post-lambda"),
         memorySize: 512,
@@ -235,16 +235,8 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         fieldName: "getTagById",
       });
       postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "createTag",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "deleteTag",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "updateTag",
+        typeName: "Query",
+        fieldName: "getAllQuestionsByTag",
       });
     }
   }

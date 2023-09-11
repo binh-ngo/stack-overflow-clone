@@ -22,6 +22,7 @@ schema {
     
     getTagById(tagName: String!): Tag
     getAllTags: [Tag]
+    getAllQuestionsByTag(tagName: String!): [Question]
   }
 
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
@@ -212,6 +213,7 @@ schema {
   type Tag {
     tagName: String!
     count: Int!
+    tagId: String!
   }
 
   input TagInput {

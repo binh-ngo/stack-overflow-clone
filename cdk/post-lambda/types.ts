@@ -3,7 +3,7 @@ export type ddbQueryPostsParams = {
     IndexName?: string;
     KeyConditionExpression?: string;
     ExpressionAttributeNames?: { [key: string]: string };
-    ExpressionAttributeValues: { [key: string]: any };
+    ExpressionAttributeValues?: { [key: string]: any };
     FilterExpression?: string;
     ReturnConsumedCapacity?: "INDEXES" | "TOTAL" | "NONE";
     ScanIndexForward?: boolean;
@@ -74,6 +74,17 @@ export type QuestionAppSyncEvent = {
     author?: string;
     quesId?: string;
     question?: QuestionInput;
+  };
+};
+
+export type TagAppSyncEvent = {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    tagName?: string;
+    count?: string;
+    tagId?: string;
   };
 };
 

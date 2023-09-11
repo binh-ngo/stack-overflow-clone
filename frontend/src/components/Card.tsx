@@ -18,6 +18,7 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = (question: CardProps) => {
+
     const [user, setUser] = useState<{ username: string } | null>(null); // State to hold user data
 
     useEffect(() => {
@@ -100,7 +101,7 @@ export const Card: React.FC<CardProps> = (question: CardProps) => {
                 <p className="text-gray-600">Written by <a href={`/author?author=${extractValue(question.author)}`} className="text-blue-500 font-bold">{`${extractValue(question.author)} `}</a><span className='text-xs text-gray-400'>{` ${getTimePassed(question.createdAt)} ago`}</span></p>
                 <div className='flex flex-row py-2'>
                     {question.tags.map((tag, index) => (
-                        <a href={`/tags/${tag}`} className="bg-sky-200 rounded-md px-1 mx-1" key={index}>{tag}</a>
+                        <a href={`/tag?tag=${tag}`} className="bg-sky-200 rounded-md px-1 mx-1" key={index}>{tag}</a>
                     ))}
                 </div>
             </div>

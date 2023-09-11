@@ -38,10 +38,11 @@ const promises = questionInput.tags.map(async (tag) => {
     const putRequestParams = {
       TableName: process.env.POSTS_TABLE,
       Item: {
-        PK: `TAG#${tag}`,
-        SK: `TAG#${tagId}`,
+        PK: `TAGS`,
+        SK: `TAG#${tag}`,
+        tagId: `TAG#${tagId}`,
         type: "tag",
-        tagName: tag,
+        tagName: `TAG#${tag}`,
         count: 0,
       },
     };
@@ -55,8 +56,8 @@ const promises = questionInput.tags.map(async (tag) => {
             "#SK": "SK",
           },
           ExpressionAttributeValues: {
-            ":post_partition": `TAG#${tag}`,
-            ":sk_prefix": "TAG#",
+            ":post_partition": `TAGS`,
+            ":sk_prefix": `TAG#${tag}`,
           },
         })
         .promise();

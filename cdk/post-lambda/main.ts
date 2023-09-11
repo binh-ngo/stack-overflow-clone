@@ -17,29 +17,31 @@ import getCommentById from "./comments/getCommentById";
 import getAllComments from "./comments/getAllComment";
 import updateComment from "./comments/updateComment";
 
-import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, Answer } from "./types";
+import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, TagAppSyncEvent } from "./types";
 // import appendAnswer from "./answers/appendAnswer";
 import getQuestionWithAnswersAndComments from "./questions/getQuestionWithAnswersAndComments";
+import getTagById from "./tags/getTagById";
+import getAllTags from "./tags/getAllTags";
+import getAllQuestionsByTag from "./tags/getAllQuestionsByTag";
 
 export async function handler(event: any): Promise<any> {
   console.log(`EVENT --- ${JSON.stringify(event)}`);
   const eventType = getEventType(event);
 
   if (eventType === "Question") {
-    // Handle QuestionAppSyncEvent
     return handleQuestionEvent(event);
   } else if (eventType === "Answer") {
-    // Handle AnswerAppSyncEvent
     return handleAnswerEvent(event);
   } else if (eventType === "Comment") {
-    // Handle CommentAppSyncEvent
     return handleCommentEvent(event);
+  } else if(eventType === "Tag") {
+    return handleTagEvent(event);
   } else {
     throw new Error(`Unknown event type.`);
   }
 }
 // Function to determine the event type based on the field name
-function getEventType(event: any): "Question" | "Answer" | "Comment" {
+function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" {
   switch (event.info.fieldName) {
     case "getQuestionById":
     case "getAllQuestions":
@@ -61,6 +63,10 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" {
     case "updateComment":
     case "deleteComment":
       return "Comment";
+    case "getAllTags":
+    case "getTagById":
+    case "getAllQuestionsByTag":
+      return "Tag";
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }
@@ -133,8 +139,6 @@ function handleCommentEvent(event: CommentAppSyncEvent) {
       return getCommentById(event.arguments.author!, event.arguments.commId!);
     case "getAllComments":
       return getAllComments(event.arguments.author!);
-    case "getAllComments":
-      return getAllComments(event.arguments.author!);
     case "createComment":
       return createComment(event.arguments.parentId!, event.arguments.comment!);
     case "updateComment":
@@ -145,6 +149,21 @@ function handleCommentEvent(event: CommentAppSyncEvent) {
       );
     case "deleteComment":
       return deleteComment(event.arguments.author!, event.arguments.commId!);
+    default:
+      throw new Error(`Unknown field name: ${event.info.fieldName}`);
+  }
+}
+
+// Handler function for tag events
+function handleTagEvent(event: TagAppSyncEvent) {
+  switch (event.info.fieldName) {
+    case "getTagById":
+      return getTagById(event.arguments.tagName!);
+    case "getAllTags":
+      return getAllTags();
+    case "getAllQuestionsByTag":
+      console.log(`TAGNAME -------- ${event.arguments.tagName!}`)
+      return getAllQuestionsByTag(event.arguments.tagName!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }

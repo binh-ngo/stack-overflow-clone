@@ -1,38 +1,39 @@
 import { ddbQueryPostsParams } from "../types";
+require('dotenv').config()
 
 const AWS = require("aws-sdk");
-require('dotenv').config()
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const getTagById = async (tagName: string) => {
-  console.log(`getTagById called with: (${tagName}`);
+const getAllTags = async () => {
+  console.log(`getAllTags called`);
 
-  const params = {
-    TableName: process.env.POSTS_TABLE,
-    KeyConditionExpression: "begins_with(#PK, :pk_prefix) AND begins_with(#SK, :sk_prefix)",
+  const params: ddbQueryPostsParams = {
+    TableName: process.env.POSTS_TABLE || "",
     ExpressionAttributeNames: {
       "#PK": "PK",
-      "#SK": "SK",    
+      "#SK": "SK"
     },
     ExpressionAttributeValues: {
-      ":pk_prefix": `TAG#${tagName}`,
-      ":sk_prefix": "TAG#"
+      ":post_partition": "TAGS",
+      ":sk_prefix": "TAG#",
     },
+    KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
     ReturnConsumedCapacity: "TOTAL",
+    ScanIndexForward: false, // Set this to true for ascending order
   };
-  
+
   try {
     const data = await docClient.query(params).promise();
 
     console.log(`data: ${JSON.stringify(data, null, 2)}`);
-    return data.Item;
 
-    } catch (err) {
+    return data.Items;
+
+  } catch (err) {
     console.log(`err: ${JSON.stringify(err, null, 2)}`);
 
     return null;
   }
 };
 
-
-export default getTagById;
+export default getAllTags;

@@ -15,6 +15,12 @@ type ddbGetAllQueryResponse = {
   value: string | null;
 }
 
+type ddbGetAllTagsResponse = {
+  tagName: string;
+  count: number;
+  tagId: string;
+}
+
 type Answer = {
   author: string;
   body: string;
@@ -88,4 +94,4 @@ type CreateQuestionProps = {
   tags?: string[];
 };
 
-export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, CreateQuestionProps };
+export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, ddbGetAllTagsResponse, CreateQuestionProps };

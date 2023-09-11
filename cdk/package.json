@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.72.0",
-    "aws-sdk": "^2.1420.0",
+    "aws-sdk": "^2.1454.0",
     "cdk-spa-deploy": "^2.0.0-alpha.1",
     "chance": "^1.1.11",
     "constructs": "^10.0.0",
