@@ -1,5 +1,4 @@
 import { API } from "aws-amplify";
-import { GraphQLResult } from '@aws-amplify/api';
 
 // ===========
 // CREATE QUESTION
@@ -49,36 +48,9 @@ const ddbCreateQuestion = async (question: SaveQuestionProps) => {
   };
   
 
+  // ==============
+// GET Question By ID
 // ==============
-// GET Question with Answers and Comments
-// ==============
-
-const getQuestionWithAnswersAndCommentsQuery = `
-    query getQuestionWithAnswersAndComments($quesId: String!) {
-      getQuestionWithAnswersAndComments(quesId: $quesId) {
-        author
-        body
-        quesId
-        createdAt
-      }
-    }
-  `;
-
-const ddbGetQuestionWithAnswersAndComments = async (quesId: string) => {
-  const resp = await API.graphql({
-    query: getQuestionWithAnswersAndCommentsQuery,
-    variables: {
-      quesId,
-    },
-    authMode: "API_KEY"
-  });
-  // console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
-  // @ts-ignore
-  const data = resp.data.getQuestionWithAnswersAndComments;
-  // console.log(`post.content: ${post.content}`);
-  return data;
-};
-
 
 const getQuestionByIdQuery = `
     query getQuestionById($author: String!, $quesId: String!) {
@@ -95,10 +67,6 @@ const getQuestionByIdQuery = `
       }
     }
   `;
-
-  // ==============
-// GET Question By ID
-// ==============
 
 const ddbGetQuestionById = async (author: string, quesId: string) => {
   const resp = await API.graphql({
@@ -213,40 +181,6 @@ const ddbUpdateQuestion = async (question: SaveQuestionProps) => {
   console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
 };
 
-const createAnswerQuery = `
-    mutation updateQuestion($author: String!, $quesId: String!, $question: QuestionInput!) {
-      updateQuestion(author: $author, quesId: $quesId, question: $question) {
-        author
-        body
-        createdAt
-        quesId
-        title
-        updatedAt
-        views
-        tags
-      }
-    }
-  `;
-
-const ddbCreateAnswer = async (question: SaveQuestionProps) => {
-  const contentString = JSON.stringify(question.body);
-  // console.log(`contentString: ${contentString}`);
-  const resp = await API.graphql({
-    query: createAnswerQuery,
-    variables: {
-      author: question.author,
-      postId: question.quesId,
-      post: {
-        author: question.author,
-        title: question.title,
-        body: contentString,
-      },
-    },
-    authMode: "AMAZON_COGNITO_USER_POOLS",
-  });
-  console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
-};
-
 // ===========
 // DELETE POST
 // ===========
@@ -272,73 +206,7 @@ const ddbDeleteQuestion = async (quesId: string, author: string) => {
   console.log(`successfully deleted: ${resp.data.deletePost}`);
 };
 
-const getAllTagsQuery = `
-query getAllTags {
-  getAllTags {
-    tagName
-    tagId
-    count
-  }
-}
-`;
-const ddbGetAllTags = async () => {
-  try {
-    const resp = await API.graphql({ 
-      query: getAllTagsQuery,
-      authMode: "API_KEY"
-    });
 
-    // Use a type assertion to specify the expected type
-    const typedResp = resp as GraphQLResult<any>;
-
-    if (typedResp.errors) {
-      // Handle GraphQL errors
-      console.error('GraphQL errors:', typedResp.errors);
-      return [];
-    }
-
-    console.log(`data from GraphQL: ${JSON.stringify(typedResp.data, null, 2)}`);
-    
-    // Make sure the response structure matches your expectations
-    if (typedResp.data && typedResp.data.getAllTags) {
-      return typedResp.data.getAllTags;
-    } else {
-      return [];
-    }
-  } catch (error) {
-    // Handle network or other errors
-    console.error('Error:', error);
-    return [];
-  }
-};
-const getAllQuestionsByTagQuery = `
-query getAllQuestionsByTag($tagName: String!) {
-  getAllQuestionsByTag(tagName: $tagName) {
-    author
-    title
-    body
-    quesId
-    points
-    views
-    createdAt
-    updatedAt
-    tags
-  }
-}
-`;
-
-const ddbGetAllQuestionsByTag = async (tagName: string) => {
-  const resp = await API.graphql({ 
-    query: getAllQuestionsByTagQuery,
-    variables: {
-      tagName
-    },
-    authMode: "API_KEY"
-  });
-  console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
-  // @ts-ignore
-  return resp.data.getAllQuestionsByTag;
-};
 export {
   ddbCreateQuestion,
   ddbGetAllQuestions,
@@ -346,8 +214,4 @@ export {
   ddbUpdateQuestion,
   ddbDeleteQuestion,
   ddbGetAllQuestionsFromAllUsers,
-  ddbCreateAnswer,
-  ddbGetQuestionWithAnswersAndComments,
-  ddbGetAllTags,
-  ddbGetAllQuestionsByTag
 };

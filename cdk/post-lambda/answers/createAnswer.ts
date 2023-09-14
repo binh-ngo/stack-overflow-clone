@@ -11,10 +11,10 @@ const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: An
     const ansId = ulid();
 
     const answer: Answer = {
-        ansId: `ANSWER#${ansId}`,
-        quesId: quesId,
-        quesAuthor: quesAuthor,
-        author: `AUTHOR#${answerInput.author}`,
+        ansId,
+        quesId,
+        quesAuthor,
+        author: answerInput.author,
         body: answerInput.body,
         points: 0,
         createdAt: new Date().toISOString(),
@@ -25,18 +25,35 @@ const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: An
     const formattedAuthor = answerInput.author ? answerInput.author.trim().replace(/\s+/g, "") : "";
 
     const params = {
-        TableName: process.env.POSTS_TABLE,
-        Item: {
-            PK: `AUTHOR#${formattedAuthor}`,
-            SK: `ANSWER#${ansId}`,
-            type: "answer",
-            ...answer,
+        RequestItems: {
+            "StackOverflowClonePostApiStack861B9897-StackOverflowPostsTable118A6065-1M2XMVIH3GMXR": [
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `QUESTION#${quesId}`,
+                            SK: `ANSWER#${ansId}`,
+                            type: 'question',
+                            ...answer,
+                        },
+                    },
+                },
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `AUTHOR#${formattedAuthor}`,
+                            SK: `ANSWER#${ansId}`,
+                            type: 'question',
+                            ...answer,
+                        },
+                    },
+                },
+            ],
         },
         ReturnConsumedCapacity: "TOTAL",
     };
 
     try {
-        await docClient.put(params).promise();
+        const data = await docClient.batchWrite(params).promise();
         console.log(`Created answer: ${JSON.stringify(answer, null, 2)}`);
         return answer;
     } catch (err) {
@@ -46,32 +63,3 @@ const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: An
 };
 
 export default createAnswer;
-
-        //     await docClient.transactWrite({
-        //         TransactItems: [{
-        //             Put: {
-        //                 TableName: process.env.POSTS_TABLE,
-        //                 Item: {
-        //                     PK: `AUTHOR#${answerInput.author}`,
-        //                     SK: `ANSWER#${ansId}`,
-        //                     ...answer,
-        //                 },
-        //                 ReturnConsumedCapacity: "TOTAL",
-        //             }
-        //         }, {
-        //             Update: {
-        //                 TableName: process.env.POSTS_TABLE,
-        //                 Key: {
-        //                     PK: `AUTHOR#${quesAuthor}`,
-        //                     SK: `QUESTION#${quesId}`,
-        //                 },
-        //                 UpdateExpression: 'SET answers = list_append(if_not_exists(answers, :empty_list), :answer)',
-        //                 ExpressionAttributeValues: {
-        //                     ':empty_list': [],
-        //                     ':answer': [answer],
-        //                 },
-        //                 ConditionExpression: 'attribute_exists(PK)',
-        //             }
-        //         }
-        //         ]
-        //     }).promise(); 

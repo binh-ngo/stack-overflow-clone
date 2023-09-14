@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
-import { ddbGetAllQuestionsByTag } from "../graphql"
 import { Card } from '../components/Card';
 import { ddbGetAllQueryResponse } from '../types';
 import { AskQuestionButton } from '../components/AskQuestionButton';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
+import { ddbGetAllQuestionsByTag } from '../graphql/tags';
 
 export const SingleTag = () => {
   const [questions, setQuestions] = useState<ddbGetAllQueryResponse[]>([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const tag = "TAG#" + searchParams.get('tag');
+  const tag = searchParams.get('tag');
 console.log(tag)
 
   useEffect(() => {
     const fetchQuestions = async () => {
-        const response = await ddbGetAllQuestionsByTag(tag);
+        const response = await ddbGetAllQuestionsByTag(tag ? tag : '');
         setQuestions(response); // Set questions directly to the API response
         console.log(response);
     };
@@ -26,13 +26,11 @@ const renderQuestions = () => {
   const sortedQuestions = questions.sort(
     (a, b) => moment(b.createdAt).valueOf() - moment(a.createdAt).valueOf()
   );
-  
-  const formattedTag = tag ? (tag ? tag.substring(4).trim().replace(/\s+/g, "") : "") : "";
 
   return (
     <>
         <div className="mt-2 border-b-2 absolute left-36 text-3xl text-blue-500 font-bold mb-2 w-full">
-        <h1>{formattedTag} questions</h1>
+        <h1>{tag} questions</h1>
       </div>
       <div className='absolute right-4 -mt-2'>
       <AskQuestionButton />

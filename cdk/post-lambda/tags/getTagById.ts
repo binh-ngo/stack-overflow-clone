@@ -9,14 +9,14 @@ const getTagById = async (tagName: string) => {
 
   const params = {
     TableName: process.env.POSTS_TABLE,
-    KeyConditionExpression: "begins_with(#PK, :pk_prefix) AND begins_with(#SK, :sk_prefix)",
+    KeyConditionExpression: "#PK = :PK and #SK = :SK",
     ExpressionAttributeNames: {
       "#PK": "PK",
       "#SK": "SK",    
     },
     ExpressionAttributeValues: {
-      ":pk_prefix": `TAG#${tagName}`,
-      ":sk_prefix": "TAG#"
+      ":PK": `TAGS`,
+      ":SK": `TAGS#${tagName}`
     },
     ReturnConsumedCapacity: "TOTAL",
   };

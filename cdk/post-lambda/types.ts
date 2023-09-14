@@ -83,7 +83,7 @@ export type TagAppSyncEvent = {
   };
   arguments: {
     tagName?: string;
-    count?: string;
+    count?: number;
     tagId?: string;
   };
 };

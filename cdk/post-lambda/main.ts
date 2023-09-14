@@ -19,7 +19,6 @@ import updateComment from "./comments/updateComment";
 
 import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, TagAppSyncEvent } from "./types";
 // import appendAnswer from "./answers/appendAnswer";
-import getQuestionWithAnswersAndComments from "./questions/getQuestionWithAnswersAndComments";
 import getTagById from "./tags/getTagById";
 import getAllTags from "./tags/getAllTags";
 import getAllQuestionsByTag from "./tags/getAllQuestionsByTag";
@@ -83,8 +82,6 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
       return getAllQuestions(event.arguments.author!);
     case "getAllQuestionsFromAllUsers":
       return getAllQuestionsFromAllUsers();
-    case "getQuestionWithAnswersAndComments":
-      return getQuestionWithAnswersAndComments(event.arguments.quesId!);
     case "createQuestion":
       const questionInput: QuestionInput = {
         title: event.arguments.question!.title,

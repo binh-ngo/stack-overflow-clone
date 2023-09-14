@@ -14,8 +14,8 @@ const createQuestion = async (questionInput: QuestionInput) => {
      const formattedAuthor = questionInput.author ? questionInput.author.trim().replace(/\s+/g, "") : "";
 
     const question: Question = {
-        quesId: `QUESTION#${quesId}`,
-        author: `AUTHOR#${formattedAuthor}`,
+        quesId,
+        author: formattedAuthor,
         title: questionInput.title,
         body: questionInput.body,
         tags: questionInput.tags,
@@ -58,13 +58,13 @@ const createQuestion = async (questionInput: QuestionInput) => {
 
     try {
         const data = await docClient.batchWrite(params).promise();
-        console.log("Success", data);
+        console.log(`Created question: ${JSON.stringify(question, null, 2)}`);
         if(data) {
             createTag(question);
         }
         return question;
     } catch (err) {
-        console.log("Error", err);
+        console.log(`DynamoDB Error: ${JSON.stringify(err, null, 2)}`);
         throw err;
     }
 };

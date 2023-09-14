@@ -16,7 +16,7 @@ const getAllQuestionsByTag = async (tagName: string) => {
       "#SK": "SK"
     },
     ExpressionAttributeValues: {
-      ":post_partition": tagName,
+      ":post_partition": `TAG#${tagName}`,
       ":sk_prefix": "QUESTION#",
     },
     ReturnConsumedCapacity: "TOTAL",

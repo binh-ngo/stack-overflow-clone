@@ -15,7 +15,7 @@ const getAllQuestions = async (author: string) => {
       "#PK": "PK",
     },
     ExpressionAttributeValues: {
-      ":post_partition": author,
+      ":post_partition": `AUTHOR#${author}`,
     },
     ReturnConsumedCapacity: "TOTAL",
     ScanIndexForward: false,

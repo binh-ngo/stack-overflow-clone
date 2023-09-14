@@ -9,21 +9,21 @@ const getAllTags = async () => {
 
   const params: ddbQueryPostsParams = {
     TableName: process.env.POSTS_TABLE || "",
-    KeyConditionExpression: "#PK = :post_partition",
+    KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
     ExpressionAttributeNames: {
       "#PK": "PK",
+      "#SK": "SK"
     },
     ExpressionAttributeValues: {
       ":post_partition": "TAGS",
+      ":sk_prefix": "TAG#",
     },
     ReturnConsumedCapacity: "TOTAL",
     ScanIndexForward: false, // Set this to true for ascending order
   };
-
+console.log(`PARAMS ------ ${JSON.stringify(params)}`);
   try {
     const data = await docClient.query(params).promise();
-
-    console.log(`data: ${JSON.stringify(data, null, 2)}`);
 
     return data.Items;
 

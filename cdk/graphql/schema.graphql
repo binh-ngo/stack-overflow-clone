@@ -14,15 +14,16 @@ schema {
     getAllAnswers(author: String!): [Answer] 
     getAnswerById(author: String!, ansId: String!): Answer
 
+    getTagById(tagName: String!): Tag
+    getAllTags: [Tag]
+    getAllQuestionsByTag(tagName: String!): [Question]
+    
     # getAllComments(author: String!): [Comment] 
     # getCommentById(author: String!, commId: String!): Comment
 
     # getUser(username: String!): User!
     # getAllUsers: [UserList]!
     
-    getTagById(tagName: String!): Tag
-    getAllTags: [Tag]
-    getAllQuestionsByTag(tagName: String!): [Question]
   }
 
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
@@ -121,27 +122,6 @@ schema {
     author: String!
   }
 
-  # type User {
-  #   id: ID!
-  #   username: String!
-  #   imageUrl: AWSURL
-  #   role: RoleType!
-  #   questions: [QuestionRep]!
-  #   answers: [AnswerRep]!
-  #   createdAt: AWSDateTime!
-  #   reputation: Int!
-  #   recentQuestions: [RecentActivity]!
-  #   recentAnswers: [RecentActivity]!
-  #   totalQuestions: Int!
-  #   totalAnswers: Int!
-  # }
-
-  # type UserList {
-  #   id: ID!
-  #   username: String!
-  #   createdAt: AWSDateTime!
-  # }
-
   type Comment @aws_api_key @aws_cognito_user_pools {
     commId: ID!
     parentId: ID!
@@ -164,20 +144,6 @@ schema {
     updatedAt: AWSDateTime!
   }
 
-  # type QuestionList {
-  #   quesId: ID!
-  #   author: String!
-  #   title: String!
-  #   body: String!
-  #   tags: [String!]!
-  #   points: Int!
-  #   views: Int!
-  #   answers: [Answer]!
-  #   answerCount: Int!
-  #   createdAt: AWSDateTime!
-  #   updatedAt: AWSDateTime!
-  # }
-
   type Question @aws_api_key @aws_cognito_user_pools  {
     quesId: ID!
     author: String!
@@ -193,25 +159,10 @@ schema {
     updatedAt: AWSDateTime!
   }
 
-  # type NextPrevPage {
-  #   page: Int!
-  #   limit: Int!
-  # }
-
-  # type PaginatedQuesList {
-  #   questions: [QuestionList]!
-  #   next: NextPrevPage
-  #   previous: NextPrevPage
-  # }
-
   type Tag {
     tagName: String!
     count: Int!
     tagId: String!
-  }
-
-  input TagInput {
-    tagName: String!
   }
 
   input QuestionInput {
@@ -230,16 +181,9 @@ input CommentInput  {
     author: String!;
 }
 
-# input OrderByInput {
-#   field: String!
-#   order: OrderDirection!
-# }
-
 type QuestionWithAnswersAndComments {
   quesId: String
   createdAt: String
-  SK: String
-  PK: String
   author: String
   body: String
 }

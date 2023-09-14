@@ -105,13 +105,13 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       // Attach the necessary policy statement to the role
       appSyncDataSourceRole.addToPolicy(new PolicyStatement({
         effect: Effect.ALLOW,
-        actions: ['lambda:InvokeFunction'], // Add other required actions as needed
+        actions: ['lambda:InvokeFunction'], 
         resources: [postLambda.functionArn],
       }));
       
       appSyncDataSourceRole.addToPolicy(new PolicyStatement({
         effect: Effect.ALLOW,
-        actions: ['dynamodb:UpdateItem'], // Add other required DynamoDB actions as needed
+        actions: ['dynamodb:UpdateItem'], 
         resources: [postsTable.tableArn],
       }));
 
@@ -128,10 +128,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       postDataSource.createResolver({
         typeName: "Query",
         fieldName: "getAllQuestionsFromAllUsers",
-      });
-      postDataSource.createResolver({
-        typeName: "Query",
-        fieldName: "getQuestionWithAnswersAndComments",
       });
       postDataSource.createResolver({
         typeName: "Query",
@@ -225,7 +221,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       });
 
       // Tags
-
       postDataSource.createResolver({
         typeName: "Query",
         fieldName: "getAllTags",

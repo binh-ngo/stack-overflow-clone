@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ddbCreateQuestion } from "../graphql";
 import Editor from "../components/Lexical/Editor.js";
 import { Auth } from "aws-amplify";
 import "../components/Lexical/styles.css"
 import { CreateQuestionProps } from "../types";
 import { useNavigate } from 'react-router-dom';
+import { ddbCreateQuestion } from "../graphql/questions";
 
 export const CreateQuestion = (props: CreateQuestionProps) => {
   const [title, setTitle] = useState("");
@@ -42,8 +42,12 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
     const cleanedString = inputString.replace(/,/g, ' '); // Replace commas with spaces
     const tagsArray = cleanedString.split(/\s+/); // Split by spaces
 
-    return tagsArray;
+    return removeDuplicates(tagsArray);
   }
+  function removeDuplicates(arr: string[]) {
+    return arr.filter((item,
+        index) => arr.indexOf(item) === index);
+}
 
   const handleSave = async () => {
     // console.log(JSON.stringify(editorJson, null, 2));
@@ -68,9 +72,7 @@ export const CreateQuestion = (props: CreateQuestionProps) => {
         console.error('Response is not a GraphQL result:', response);
       } if (createdQuestion) {
         setSuccessfulSave(true);
-        const authorQueryParam = createdQuestion.author ? question.author.replace("AUTHOR#", "") : 'Unknown';
-        const quesIdQueryParam = createdQuestion.quesId.replace("QUESTION#", "");
-        navigate(`/question?quesId=${quesIdQueryParam}&author=${authorQueryParam}`);
+        navigate(`/question?quesId=${createdQuestion.quesId}&author=${createdQuestion.author}`);
       } else {
         console.log("onSave called but title or children are empty");
       }

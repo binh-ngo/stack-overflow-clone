@@ -22,9 +22,9 @@ const promises = questionInput.tags!.map(async (tag) => {
       Item: {
         PK: `TAGS`,
         SK: `TAG#${tag}`,
-        tagId: `TAG#${tagId}`,
+        tagId: tagId,
         type: "tag",
-        tagName: `TAG#${tag}`,
+        tagName: tag,
         count: 0,
       },
     };
@@ -32,13 +32,13 @@ const promises = questionInput.tags!.map(async (tag) => {
     try {
       const tagExists = await docClient.query({
           TableName: process.env.POSTS_TABLE,
-          KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
+          KeyConditionExpression: "#PK = :PK AND begins_with(#SK, :sk_prefix)",
           ExpressionAttributeNames: {
             "#PK": "PK",
             "#SK": "SK",
           },
           ExpressionAttributeValues: {
-            ":post_partition": `TAGS`,
+            ":PK": `TAGS`,
             ":sk_prefix": `TAG#${tag}`,
           },
         })
@@ -58,22 +58,22 @@ const promises = questionInput.tags!.map(async (tag) => {
   });
   
   const tagPutRequests = questionInput.tags!.flatMap(tag => [
-        {
-            PutRequest: {
-                Item: {
-                    PK: questionInput.quesId,
-                    SK: `TAG#${tag}`,
-                    type: 'tag',
-                    tagName: tag,
-                    count: 0
-                },
-            },
-        },
+        // {
+        //     PutRequest: {
+        //         Item: {
+        //             PK: questionInput.quesId,
+        //             SK: `TAG#${tag}`,
+        //             type: 'tag',
+        //             tagName: tag,
+        //             count: 0
+        //         },
+        //     },
+        // },
         {
             PutRequest: {
                 Item: {
                     PK: `TAG#${tag}`,
-                    SK: questionInput.quesId,
+                    SK: `QUESTION#${questionInput.quesId}`,
                     type: 'question',
                     quesId: questionInput.quesId,
                     author: questionInput.author,

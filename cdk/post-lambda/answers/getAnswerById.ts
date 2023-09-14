@@ -12,8 +12,8 @@ const getAnswerById = async (author: string, ansId: string) => {
   const params = {
     TableName: process.env.POSTS_TABLE,
     Key: {
-      PK: `ANSWER#${author}`,
-      SK: ansId,
+      PK: `AUTHOR#${author}`,
+      SK: `ANSWER#${ansId}`,
     },
     ReturnConsumedCapacity: "TOTAL",
   };

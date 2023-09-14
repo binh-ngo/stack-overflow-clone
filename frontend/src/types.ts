@@ -1,4 +1,5 @@
-import { SaveQuestionProps } from "./graphql";
+import { SaveAnswerProps } from "./graphql/answers";
+import { SaveQuestionProps } from "./graphql/questions";
 
 type ddbGetAllQueryResponse = {
   author: string;
@@ -92,4 +93,12 @@ type CreateQuestionProps = {
   tags?: string[];
 };
 
-export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, ddbGetAllTagsResponse, CreateQuestionProps };
+type CreateAnswerProps = {
+  onSave?: (answer: SaveAnswerProps) => void;
+  answerAuthor?: string;
+  children?: string;
+  quesId?: string;
+  quesAuthor?: string;
+};
+
+export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, ddbGetAllTagsResponse, CreateQuestionProps, CreateAnswerProps };

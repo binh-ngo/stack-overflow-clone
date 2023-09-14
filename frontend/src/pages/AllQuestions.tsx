@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ddbGetAllQuestionsFromAllUsers } from "../graphql"
 import { Card } from '../components/Card';
 import { ddbGetAllQueryResponse } from '../types';
 import { AskQuestionButton } from '../components/AskQuestionButton';
 import moment from 'moment';
+import { ddbGetAllQuestionsFromAllUsers } from '../graphql/questions';
 
 
 export const AllQuestions = () => {

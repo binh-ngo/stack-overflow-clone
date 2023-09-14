@@ -16,11 +16,12 @@ import { LandingPage } from "./pages/LandingPage";
 import { awsconfig } from "./aws-exports";
 import { Amplify } from "aws-amplify"
 import { CreateQuestion } from "./pages/CreateQuestion";
-import { ddbCreateAnswer, ddbUpdateQuestion } from "./graphql";
 import { EditQuestion } from "./pages/EditPost";
 import ReadonlyPage from "./pages/ReadOnlyPage";
 import { AllQuestionsFromOneAuthor } from "./pages/AllQuestionsFromOneAuthor";
 import { SingleTag } from "./pages/SingleTag";
+import { ddbUpdateQuestion } from "./graphql/questions";
+import { ddbCreateAnswer } from "./graphql/answers";
 // import RequireAuth from "./RequireAuth";
 Amplify.configure(awsconfig);
 

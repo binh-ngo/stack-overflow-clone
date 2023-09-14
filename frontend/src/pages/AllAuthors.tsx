@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AskQuestionButton } from '../components/AskQuestionButton';
-import { ddbGetAllTags } from '../graphql';
+import { ddbGetAllTags } from '../graphql/tags';
 import { ddbGetAllTagsResponse } from '../types';
 
 // TODO: Have search bar filter displayed tags after each keystroke

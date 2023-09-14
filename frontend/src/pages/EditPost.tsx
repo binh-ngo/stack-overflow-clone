@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ddbCreateQuestion, ddbGetQuestionById, SaveQuestionProps } from "../graphql";
 import Editor from "../components/Lexical/Editor.js";
 import "../components/Lexical/styles.css"
 import { useLocation } from "react-router-dom";
 import { ddbGetAllQueryResponse } from "../types";
+import { ddbCreateQuestion, ddbGetQuestionById, SaveQuestionProps } from "../graphql/questions";
 
 type CreateQuestionProps = {
   // onSave: (title: string, content: string) => void;
@@ -25,8 +25,8 @@ export const EditQuestion = (props: CreateQuestionProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
-  const author = "AUTHOR#" + searchParams.get('author');
-  const quesId = "QUESTION#" + searchParams.get('quesId');
+  const author = searchParams.get('author');
+  const quesId = searchParams.get('quesId');
   
   // console.log(`AUTHOR ---- ${author}`)
   // console.log(`QUESID ---- ${quesId}`)
@@ -67,7 +67,7 @@ export const EditQuestion = (props: CreateQuestionProps) => {
       console.log("onSave called");
       // console.log(`children: ${JSON.stringify(children, null, 2)}`);
       console.log(`onSave called with quesId: ${quesId}`);
-      props.onSave({ title, body: children, quesId });
+      props.onSave({ title, body: children, quesId: quesId ? quesId : ''});
       setSuccessfulSave(true);
 
       const question = {

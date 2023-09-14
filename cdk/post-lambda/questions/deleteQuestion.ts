@@ -11,8 +11,8 @@ const deleteQuestion = async (author: string, quesId: string) => {
     const getItemParams = {
       TableName: process.env.POSTS_TABLE, 
       Key: {
-        PK: quesId,
-        SK: quesId,
+        PK: `QUESTION#${quesId}`,
+        SK: `QUESTION#${quesId}`,
       },
     };
 
@@ -27,7 +27,7 @@ const deleteQuestion = async (author: string, quesId: string) => {
       {
         DeleteRequest: {
           Key: {
-            PK: quesId,
+            PK: `QUESTION#${quesId}`,
             SK: `TAG#${tag}`,
           },
         },
@@ -36,7 +36,7 @@ const deleteQuestion = async (author: string, quesId: string) => {
         DeleteRequest: {
           Key: {
             PK: `TAG#${tag}`,
-            SK: quesId,
+            SK: `QUESTION#${quesId}`,
           },
         },
       },
@@ -49,16 +49,16 @@ const deleteQuestion = async (author: string, quesId: string) => {
           {
             DeleteRequest: {
               Key: {
-                PK: author,
-                SK: quesId,
+                PK: `AUTHOR#${author}`,
+                SK: `QUESTION#${quesId}`,
               },
             },
           },
           {
             DeleteRequest: {
               Key: {
-                PK: quesId,
-                SK: quesId,
+                PK: `QUESTION#${quesId}`,
+                SK: `QUESTION#${quesId}`,
               },
             },
           },

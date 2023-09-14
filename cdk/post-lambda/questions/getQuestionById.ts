@@ -7,8 +7,8 @@ console.log(`invoking incrementViews on question (${author}, ${quesId})`)
   const updateViewsParams = {
     TableName: process.env.POSTS_TABLE,
     Key: {
-      PK: author,
-      SK: quesId    
+      PK: `AUTHOR#${author}`,
+      SK: `QUESTION#${quesId}`    
     },
     UpdateExpression: "SET #views = #views + :i",
     ExpressionAttributeNames: {
@@ -41,8 +41,8 @@ const getQuestionById = async (author: string, quesId: string) => {
   const params = {
     TableName: process.env.POSTS_TABLE,
     Key: {
-      PK: author,
-      SK: quesId,
+      PK: `AUTHOR#${author}`,
+      SK: `QUESTION#${quesId}`,
     },
     ReturnConsumedCapacity: "TOTAL",
   };
