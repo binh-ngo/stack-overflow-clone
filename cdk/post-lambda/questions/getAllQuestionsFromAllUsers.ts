@@ -9,21 +9,21 @@ const getAllQuestionsFromAllUsers = async () => {
 
   const params: ddbQueryPostsParams = {
     TableName: process.env.POSTS_TABLE || "",
+    KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)",
     ExpressionAttributeNames: {
       "#PK": "PK",
       "#SK": "SK",
     },
     ExpressionAttributeValues: {
-      ":pk_prefix": "AUTHOR#",
+      ":post_partition": "QUESTIONS",
       ":sk_prefix": "QUESTION#",
     },
-    FilterExpression: "begins_with(#PK, :pk_prefix) AND begins_with(#SK, :sk_prefix)",
     ReturnConsumedCapacity: "TOTAL",
     ScanIndexForward: false, // Set this to true for ascending order
   };
-
+ 
   try {
-    const data = await docClient.scan(params).promise();
+    const data = await docClient.query(params).promise();
 
     console.log(`data: ${JSON.stringify(data, null, 2)}`);
 

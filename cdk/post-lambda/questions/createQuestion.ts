@@ -34,7 +34,7 @@ const createQuestion = async (questionInput: QuestionInput) => {
                 {
                     PutRequest: {
                         Item: {
-                            PK: `QUESTION#${quesId}`,
+                            PK: `QUESTIONS`,
                             SK: `QUESTION#${quesId}`,
                             type: 'question',
                             ...question,

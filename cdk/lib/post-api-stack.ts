@@ -133,7 +133,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
         typeName: "Query",
         fieldName: "getQuestionById",
       });
-      postDataSource.createResolver({
+      postDataSource.createResolver({   
         typeName: "Mutation",
         fieldName: "createQuestion",
       });

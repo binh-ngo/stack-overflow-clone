@@ -3,13 +3,11 @@ schema {
     mutation: Mutation
 }
   type Query {
-    getAllAuthors: [Author]
     getAuthorById(author: String!): Author!
 
     getAllQuestions(author: String!): [Question] 
     getAllQuestionsFromAllUsers: [Question]
     getQuestionById(author: String!, quesId: String!): Question
-    getQuestionWithAnswersAndComments(quesId: String!): [QuestionWithAnswersAndComments]
 
     getAllAnswers(author: String!): [Answer] 
     getAnswerById(author: String!, ansId: String!): Answer
@@ -179,11 +177,4 @@ input AnswerInput {
 input CommentInput  {
     body: String!;
     author: String!;
-}
-
-type QuestionWithAnswersAndComments {
-  quesId: String
-  createdAt: String
-  author: String
-  body: String
 }

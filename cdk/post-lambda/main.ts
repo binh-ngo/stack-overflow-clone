@@ -45,7 +45,6 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" {
     case "getQuestionById":
     case "getAllQuestions":
     case "getAllQuestionsFromAllUsers":
-    case "getQuestionWithAnswersAndComments":
     case "createQuestion":
     case "updateQuestion":
     case "deleteQuestion":

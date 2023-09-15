@@ -11,7 +11,10 @@ export const AllTags = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
         const response = await ddbGetAllTags();
-        setTags(response || []); 
+        const sortedTags = response.sort((a:any, b:any) =>
+        a.tagName.localeCompare(b.tagName)
+      );
+        setTags(sortedTags || []); 
         console.log(response);
     };
     fetchQuestions();

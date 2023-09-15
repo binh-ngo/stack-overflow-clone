@@ -25,6 +25,8 @@ console.log(`PARAMS ------ ${JSON.stringify(params)}`);
   try {
     const data = await docClient.query(params).promise();
 
+    console.log(`data: ${JSON.stringify(data, null, 2)}`);
+
     return data.Items;
 
   } catch (err) {
