@@ -88,6 +88,16 @@ export type TagAppSyncEvent = {
   };
 };
 
+export type AuthorAppSyncEvent = {
+  info: {
+    fieldName: string;
+  };
+  arguments: {
+    authName?: string;
+    authId?: number;
+  };
+};
+
 export type Answer = {
     ansId: string;
     quesId: string;

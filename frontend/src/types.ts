@@ -30,6 +30,12 @@ type ddbGetAllTagsResponse = {
   tagId: string;
 }
 
+type ddbGetAllAuthorsResponse = {
+  authId: string;
+  authName: string;
+  createdAt: string;
+}
+
 type Answer = {
   author: string;
   body: string;
@@ -111,4 +117,4 @@ type CreateAnswerProps = {
   quesAuthor?: string;
 };
 
-export type { Answer, Comment, Question, User, ddbGetAllQueryResponse, ddbGetAllTagsResponse, ddbGetAllAnswersResponse, CreateQuestionProps, CreateAnswerProps };
+export type { Answer, Comment, Question, User, ddbGetAllAuthorsResponse, ddbGetAllQueryResponse, ddbGetAllTagsResponse, ddbGetAllAnswersResponse, CreateQuestionProps, CreateAnswerProps };

@@ -35,5 +35,6 @@ export const AllTags = () => {
       </div>
         ))}
   </div>
-        </>  )
+        </>  
+  )
 }

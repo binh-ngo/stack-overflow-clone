@@ -183,19 +183,7 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws
       // Author Resolvers
       postDataSource.createResolver({
         typeName: "Query",
-        fieldName: "getAuthorById",
-      });
-      postDataSource.createResolver({
-        typeName: "Query",
         fieldName: "getAllAuthors",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "createAuthor",
-      });
-      postDataSource.createResolver({
-        typeName: "Mutation",
-        fieldName: "deleteAuthor",
       });
 
       // Comment Resolvers

@@ -17,11 +17,12 @@ import getCommentById from "./comments/getCommentById";
 import getAllComments from "./comments/getAllComment";
 import updateComment from "./comments/updateComment";
 
-import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, TagAppSyncEvent } from "./types";
+import { QuestionAppSyncEvent, AnswerAppSyncEvent, CommentAppSyncEvent, QuestionInput, TagAppSyncEvent, AuthorAppSyncEvent } from "./types";
 // import appendAnswer from "./answers/appendAnswer";
 import getTagById from "./tags/getTagById";
 import getAllTags from "./tags/getAllTags";
 import getAllQuestionsByTag from "./tags/getAllQuestionsByTag";
+import getAllAuthors from "./authors/getAllAuthors";
 
 export async function handler(event: any): Promise<any> {
   console.log(`EVENT --- ${JSON.stringify(event)}`);
@@ -35,12 +36,14 @@ export async function handler(event: any): Promise<any> {
     return handleCommentEvent(event);
   } else if(eventType === "Tag") {
     return handleTagEvent(event);
+  } else if (eventType === "Author") {
+    return handleAuthorEvent(event)
   } else {
     throw new Error(`Unknown event type.`);
   }
 }
 // Function to determine the event type based on the field name
-function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" {
+function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" | "Author" {
   switch (event.info.fieldName) {
     case "getQuestionById":
     case "getAnswersOfAQuestion":
@@ -66,6 +69,8 @@ function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" {
     case "getTagById":
     case "getAllQuestionsByTag":
       return "Tag";
+    case "getAllAuthors":
+      return "Author";
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }
@@ -160,6 +165,15 @@ function handleTagEvent(event: TagAppSyncEvent) {
       return getAllTags();
     case "getAllQuestionsByTag":
       return getAllQuestionsByTag(event.arguments.tagName!);
+    default:
+      throw new Error(`Unknown field name: ${event.info.fieldName}`);
+  }
+}
+
+function handleAuthorEvent(event: AuthorAppSyncEvent) {
+  switch (event.info.fieldName) {
+    case "getAllAuthors":
+      return getAllAuthors();
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }

@@ -3,8 +3,6 @@ schema {
     mutation: Mutation
 }
   type Query {
-    getAuthorById(author: String!): Author!
-
     getAllQuestions(author: String!): [Question] 
     getAllQuestionsFromAllUsers: [Question]
     getQuestionById(author: String!, quesId: String!): Question
@@ -15,13 +13,8 @@ schema {
     getTagById(tagName: String!): Tag
     getAllTags: [Tag]
     getAllQuestionsByTag(tagName: String!): [Question]
-    
-    # getAllComments(author: String!): [Comment] 
-    # getCommentById(author: String!, commId: String!): Comment
 
-    # getUser(username: String!): User!
-    # getAllUsers: [UserList]!
-    
+    getAllAuthors: [Author]
   }
 
 # @aws_cognito_user_pools AppSync directive to specify that the field should be AMAZON_COGNITO_USER_POOLS authorized.
@@ -108,10 +101,8 @@ schema {
     createdAt: AWSDateTime!
   }
   type Author {
-    id: ID!
-    author: String!
-    totalQuestions: Int!
-    totalAnswers: Int!
+    authId: ID!
+    authName: String!
     createdAt: String!
   }
 
