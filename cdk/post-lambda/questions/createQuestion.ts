@@ -44,6 +44,16 @@ const createQuestion = async (questionInput: QuestionInput) => {
                 {
                     PutRequest: {
                         Item: {
+                            PK: `QUESTION#${quesId}`,
+                            SK: `QUESTION#${quesId}`,
+                            type: 'question',
+                            ...question,
+                        },
+                    },
+                },
+                {
+                    PutRequest: {
+                        Item: {
                             PK: `AUTHOR#${formattedAuthor}`,
                             SK: `QUESTION#${quesId}`,
                             type: 'question',

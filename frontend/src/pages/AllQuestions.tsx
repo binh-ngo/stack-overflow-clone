@@ -24,8 +24,11 @@ const renderQuestions = () => {
   );
   return (
     <>
-      <div className='absolute right-2'>
+    <div className='absolute right-0 -mt-3 z-40'>
       <AskQuestionButton />
+      </div>
+      <div className="mt-2 border-b-2 absolute left-36 text-3xl text-blue-500 font-bold mb-2 w-full">
+        <h1 className='ml-2'>Recent questions</h1>
       </div>
     <div className='flex flex-col items-center w-full mt-16'>
       {sortedQuestions.map((question: ddbGetAllQueryResponse, index) => (

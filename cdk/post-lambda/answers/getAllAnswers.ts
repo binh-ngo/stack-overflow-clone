@@ -4,17 +4,19 @@ require('dotenv').config()
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const getAllAnswers = async (author: string) => {
-  console.log(`getAllAnswers called with: ${author}`);
+const getAllAnswers = async (quesId: string) => {
+  console.log(`getAllAnswers called with: ${quesId}`);
 
   const params: ddbQueryPostsParams = {
     TableName: process.env.POSTS_TABLE || "",
-    KeyConditionExpression: "#PK = :post_partition",
+    KeyConditionExpression: "#PK = :post_partition AND begins_with(#SK, :sk_prefix)", 
     ExpressionAttributeNames: {
       "#PK": "PK",
+      "#SK": "SK",
     },
     ExpressionAttributeValues: {
-      ":post_partition": `ANSWER#${author}`,
+      ":post_partition": `QUESTION#${quesId}`,
+      ":sk_prefix": "ANSWER#",
     },
     ReturnConsumedCapacity: "TOTAL",
     ScanIndexForward: true,

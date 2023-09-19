@@ -9,7 +9,7 @@ schema {
     getAllQuestionsFromAllUsers: [Question]
     getQuestionById(author: String!, quesId: String!): Question
 
-    getAllAnswers(author: String!): [Answer] 
+    getAllAnswers(quesId: String!): [Answer] 
     getAnswerById(author: String!, ansId: String!): Answer
 
     getTagById(tagName: String!): Tag
@@ -41,7 +41,7 @@ schema {
     voteQuestion(quesId: String!, voteType: VoteType!): Question! @aws_cognito_user_pools
 
     # TODO: answer lambdas for crud functionality
-    createAnswer(quesAuthor: String!, quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
+    createAnswer(answer: AnswerInput): Answer @aws_cognito_user_pools
     # appendAnswer(quesAuthor: String!, quesId: String!, answer: AnswerInput): Answer @aws_cognito_user_pools
     deleteAnswer(author: String!, ansId: String!): String @aws_cognito_user_pools
     updateAnswer(
@@ -131,13 +131,13 @@ schema {
 
   type Answer @aws_api_key @aws_cognito_user_pools {
     ansId: ID!
-    quesId: ID!
     author: String!
+    quesId: ID!
+    quesAuthor: String!
     body: String!
-    comments: [Comment]
     points: Int!
-    upvotedBy: [ID]!
-    downvotedBy: [ID]!
+    upvotedBy: [ID]
+    downvotedBy: [ID]
     createdAt: AWSDateTime!
     updatedAt: AWSDateTime!
   }
@@ -172,7 +172,9 @@ schema {
 
 input AnswerInput {
   body: String!
-  author: String!
+  answerAuthor: String!
+  quesId: String!
+  quesAuthor: String!
 }
 input CommentInput  {
     body: String!;

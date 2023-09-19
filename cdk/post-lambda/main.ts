@@ -43,6 +43,7 @@ export async function handler(event: any): Promise<any> {
 function getEventType(event: any): "Question" | "Answer" | "Comment" | "Tag" {
   switch (event.info.fieldName) {
     case "getQuestionById":
+    case "getAnswersOfAQuestion":
     case "getAllQuestions":
     case "getAllQuestionsFromAllUsers":
     case "createQuestion":
@@ -106,23 +107,23 @@ function handleQuestionEvent(event: QuestionAppSyncEvent) {
 async function handleAnswerEvent(event: AnswerAppSyncEvent) {
   switch (event.info.fieldName) {
     case "getAnswerById":
-      return getAnswerById(event.arguments.author!, event.arguments.ansId!);
+      return getAnswerById(event.arguments.answer!.answerAuthor!, event.arguments.ansId!);
     case "getAllAnswers":
-      return getAllAnswers(event.arguments.author!);
+      return getAllAnswers(event.arguments.quesId!);
     case "createAnswer":
       // const createdAnswer = await createAnswer(event.arguments.quesAuthor!, event.arguments.quesId!, event.arguments.answer!);
       // if (createdAnswer) {
       //   await appendAnswer(createdAnswer.quesAuthor!, createdAnswer.quesId!, createdAnswer);
       // }
-      return createAnswer(event.arguments.quesAuthor!, event.arguments.quesId!, event.arguments.answer!);
+      return createAnswer(event.arguments.answer!);
     case "updateAnswer":
       return updateAnswer(
-        event.arguments.author!,
+        event.arguments.answer!.answerAuthor!,
         event.arguments.ansId!,
         event.arguments.answer!
       );
     case "deleteAnswer":
-      return deleteAnswer(event.arguments.author!, event.arguments.ansId!);
+      return deleteAnswer(event.arguments.answer!.answerAuthor!, event.arguments.ansId!);
     default:
       throw new Error(`Unknown field name: ${event.info.fieldName}`);
   }

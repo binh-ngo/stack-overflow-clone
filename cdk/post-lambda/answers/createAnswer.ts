@@ -3,7 +3,7 @@ const docClient = new DynamoDB.DocumentClient();
 import { ulid } from "ulid";
 import { Answer, AnswerInput } from "../types";
 
-const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: AnswerInput) => {
+const createAnswer = async (answerInput: AnswerInput) => {
     console.log(
         `createAnswer invocation event: ${JSON.stringify(answerInput, null, 2)}`
     );
@@ -12,17 +12,17 @@ const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: An
 
     const answer: Answer = {
         ansId,
-        quesId,
-        quesAuthor,
-        author: answerInput.author,
-        body: answerInput.body,
+        quesId: answerInput.quesId!,
+        quesAuthor: answerInput.quesAuthor!,
+        author: answerInput.answerAuthor!,
+        body: answerInput.body!,
         points: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         upvotedBy: null,
         downvotedBy: null
     };
-    const formattedAuthor = answerInput.author ? answerInput.author.trim().replace(/\s+/g, "") : "";
+    const formattedAuthor = answerInput.answerAuthor ? answerInput.answerAuthor.trim().replace(/\s+/g, "") : "";
 
     const params = {
         RequestItems: {
@@ -30,7 +30,17 @@ const createAnswer = async ( quesAuthor: string, quesId: string, answerInput: An
                 {
                     PutRequest: {
                         Item: {
-                            PK: `QUESTION#${quesId}`,
+                            PK: `ANSWERS`,
+                            SK: `ANSWER#${ansId}`,
+                            type: 'question',
+                            ...answer,
+                        },
+                    },
+                },
+                {
+                    PutRequest: {
+                        Item: {
+                            PK: `QUESTION#${answer.quesId}`,
                             SK: `ANSWER#${ansId}`,
                             type: 'question',
                             ...answer,

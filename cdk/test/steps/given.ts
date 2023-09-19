@@ -37,13 +37,13 @@ const a_random_answer_input = async () => {
   const testQuestion = await createQuestion(questionInput);
 // generates a random answer that extracts the quesId from above
   const body = chance.paragraph({ sentences: 3 });
-  const author = TEST_AUTHOR;
+  const answerAuthor = TEST_AUTHOR;
   // const quesId = testQuestion!.quesId
 
   const answerInput: AnswerInput = {
     // quesId: quesId,
     body,
-    author,
+    answerAuthor,
   };
 
   return answerInput;
@@ -51,7 +51,7 @@ const a_random_answer_input = async () => {
 
 const a_random_ddb_answer = async () => {
     const answerInput: AnswerInput = await a_random_answer_input();
-    const answer = await createAnswer(answerInput.quesId!, answerInput.quesAuthor!, answerInput);
+    const answer = await createAnswer(answerInput);
     return answer;
   };
 
@@ -59,7 +59,7 @@ const a_random_ddb_answer = async () => {
 const a_random_answer_comment_input = async () => {
 // generates a random answer and posts it to the db
     const answerInput: AnswerInput = await a_random_answer_input();
-    const testAnswer = await createAnswer(answerInput.quesAuthor!, answerInput.quesId!, answerInput);
+    const testAnswer = await createAnswer(answerInput);
 // generats a random comment that extracts the ansId from above and uses it as its own parentId
     const body = chance.paragraph({ sentences: 3 });
     const author = TEST_AUTHOR;

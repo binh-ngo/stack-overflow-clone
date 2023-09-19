@@ -22,13 +22,16 @@ export const AllTags = () => {
 
   return (
     <>
-    <div className='absolute right-2'>
+    <div className='absolute right-0 -mt-3 z-40'>
     <AskQuestionButton />
     </div>
-  <div className='flex flex-col items-center w-full mt-16'>
+    <div className="mt-2 border-b-2 absolute left-40 text-3xl text-blue-500 font-bold mb-2 w-full">
+        <h1 className='ml-2'>Tags</h1>
+      </div>
+      <div className='flex flex-row justify-between mt-16'>
     {tags.map((tag: ddbGetAllTagsResponse) => (
       <div>
-        <p>{tag.tagName}</p>
+        <a href={`/tag?tag=${tag.tagName}`}><p className='text-2xl bg-sky-100 rounded-md my-6 text-blue-600 py-2 px-4 mx-8'>{tag.tagName}</p></a>
       </div>
         ))}
   </div>

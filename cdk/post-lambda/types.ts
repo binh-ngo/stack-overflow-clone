@@ -108,8 +108,8 @@ export type AnswerUpdateableFields = {
 export type AnswerInput = {
     quesId?: string;
     quesAuthor?: string;
-    body: string;
-    author: string;
+    body?: string;
+    answerAuthor?: string;
 }
 
 export type AnswerAppSyncEvent = {
@@ -117,8 +117,6 @@ export type AnswerAppSyncEvent = {
     fieldName: string;
   };
   arguments: {
-    author?: string;
-    quesAuthor?: string;
     ansId?: string;
     quesId?: string;
     answer?: AnswerInput;
