@@ -1,4 +1,4 @@
-import smallLogo from "../assets/smallLogo.png"
+import logo from "../assets/BINH_8_12_23.png"
 // import SearchButton from "./SearchButton"
 // import SearchComponent from "./SearchComponent"
 import { Login } from './Login';
@@ -22,8 +22,8 @@ export const Header = () => {
     // }, []);
   
   return (
-    <div className="flex items-center py-4 border-b-2 border-black-200">
-        <img className="w-12 ml-4" src={smallLogo} alt="stackoverflow logo"/> 
+    <div className="flex items-center border-b-2 border-black-200">
+        <img className="w-24 ml-4" src={logo} alt="stackoverflow logo"/> 
         {/* {isScreenLarge ? <SearchComponent /> : <SearchButton />} */}
         <div className='ml-28'>
         <Login />

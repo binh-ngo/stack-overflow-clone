@@ -12,7 +12,7 @@ export const AllQuestions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
         const response = await ddbGetAllQuestionsFromAllUsers();
-        setQuestions(response || []); // Set questions directly to the API response
+        setQuestions(response || []); 
         console.log(response);
     };
     fetchQuestions();

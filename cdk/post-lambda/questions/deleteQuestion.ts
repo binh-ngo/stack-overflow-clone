@@ -57,6 +57,14 @@ const deleteQuestion = async (author: string, quesId: string) => {
           {
             DeleteRequest: {
               Key: {
+                PK: `QUESTIONS`,
+                SK: `QUESTION#${quesId}`,
+              },
+            },
+          },
+          {
+            DeleteRequest: {
+              Key: {
                 PK: `QUESTION#${quesId}`,
                 SK: `QUESTION#${quesId}`,
               },

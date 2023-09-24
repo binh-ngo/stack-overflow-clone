@@ -203,7 +203,7 @@ const ddbDeleteQuestion = async (quesId: string, author: string) => {
   });
   // console.log(`data from GraphQL: ${JSON.stringify(resp, null, 2)}`);
   // @ts-ignore
-  console.log(`successfully deleted: ${resp.data.deletePost}`);
+  console.log(`successfully deleted: ${resp.data.deleteQuestion}`);
 };
 
 
